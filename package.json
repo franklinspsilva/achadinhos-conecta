@@ -1,0 +1,18 @@
+{
+  "name": "achadinhos-conecta",
+  "version": "1.0.0",
+  "description": "Sistema automatizado de afiliados para Shopee e Mercado Livre com IA e painel na nuvem",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "@google/genai": "latest",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}
