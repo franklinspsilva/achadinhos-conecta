@@ -4,7 +4,7 @@ const { GoogleGenAI } = require('@google/genai');
 require('dotenv').config();
 
 const app = express();
-app.use(express.json());
+app.use(express.static(__dirname));
 
 // Configuração segura do Banco de Dados com suporte a SSL (essencial para o Render)
 const pool = new Pool({
