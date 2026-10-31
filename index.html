@@ -419,7 +419,7 @@
                         <path d="M 15 85 A 65 65 0 1 1 145 85" fill="none" stroke="#eee" stroke-width="14" stroke-linecap="round"/>
                         <path d="M 15 85 A 65 65 0 0 1 135 40" fill="none" stroke="#bc6c25" stroke-width="14" stroke-linecap="round"/>
                     </svg>
-                    <div class="arc-gauge-value" id="totalComissao">R$ 452,90</div>
+                    <div class="arc-gauge-value" id="totalComissao">R$ 0,00</div>
                 </div>
                 <div class="metrics-details">
                     <p>Comissões e Cliques Acumulados</p>
@@ -434,7 +434,7 @@
             <form id="produtoForm">
                 <div class="form-group">
                     <label for="link_original">Colar Link do Produto:</label>
-                    <input type="url" id="link_original" required placeholder="Cole o link original aqui e a IA preenche o resto...">
+                    <input type="url" id="link_original" required placeholder="Cole o link original aqui...">
                 </div>
 
                 <div class="form-group">
@@ -458,7 +458,12 @@
                     <input type="number" step="0.01" id="preco" placeholder="149.90">
                 </div>
 
-                <button type="submit">Gerar Copy Otimizada com IA 🚀</button>
+                <div class="form-group">
+                    <label for="comissao_estimada">Comissão Estimada (R$):</label>
+                    <input type="number" step="0.01" id="comissao_estimada" placeholder="10.00">
+                </div>
+
+                <button type="submit">Cadastrar e Gerar Copy com IA 🚀</button>
             </form>
 
             <!-- Caixa de Resultado com Botão de Copiar com 1 Clique -->
@@ -470,7 +475,7 @@
 
         <!-- Modo 2: Automação Total (Um Clique) -->
         <div class="card">
-            <h2>⚡ Modo Autónomo (Automação Total por IA)</h2>
+            <h2>⚡ Modo Autônomo (Automação Total por IA)</h2>
             <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
                 A IA faz a curadoria automática dos melhores produtos, gera os textos com gatilhos mentais e publica nas redes conectadas.
             </p>
@@ -486,11 +491,7 @@
             
             <!-- Filtros de Período -->
             <div class="filter-group">
-                <button class="filter-btn active" onclick="filtrarRelatorio('diario', this)">Diário</button>
-                <button class="filter-btn" onclick="filtrarRelatorio('semanal', this)">Semanal</button>
-                <button class="filter-btn" onclick="filtrarRelatorio('quinzenal', this)">Quinzenal</button>
-                <button class="filter-btn" onclick="filtrarRelatorio('mensal', this)">Mensal</button>
-                <button class="filter-btn" onclick="filtrarRelatorio('anual', this)">Anual</button>
+                <button class="filter-btn active" onclick="carregarRelatoriosReais(this)">Todos os Dados Reais</button>
             </div>
 
             <!-- Tabela Detalhada -->
@@ -506,11 +507,11 @@
                         </tr>
                     </thead>
                     <tbody id="tabela-corpo">
-                        <!-- Preenchido via JavaScript -->
+                        <!-- Preenchido dinamicamente via Banco de Dados -->
                     </tbody>
                     <tfoot>
                         <tr style="font-weight: bold; background-color: #faf9f5;">
-                            <td colspan="3" style="text-align: right;">TOTAL NO PERÍODO:</td>
+                            <td colspan="3" style="text-align: right;">TOTAL GERAL:</td>
                             <td id="total-cli" style="text-align: center;">0</td>
                             <td id="total-val" style="text-align: right; color: var(--primary-dark);">R$ 0,00</td>
                         </tr>
@@ -555,52 +556,97 @@
     </div>
 </div>
 
-<!-- MODAL DE DETALHES DO ITEM (AO CLICAR NA TABELA) -->
+<!-- MODAL DE DETALHES DO ITEM -->
 <div id="modalDetalhes" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <h3>Detalhes da Postagem</h3>
             <button class="close-modal" onclick="fecharDetalhes()">&times;</button>
         </div>
-        <div id="conteudoDetalhes" style="font-size: 14px; line-height: 1.6; color: #444;">
-            <!-- Conteúdo dinâmico -->
-        </div>
+        <div id="conteudoDetalhes" style="font-size: 14px; line-height: 1.6; color: #444;"></div>
     </div>
 </div>
 
 <script>
-    // --- CARREGAR CONFIGURAÇÕES SALVAS AO ABRIR O APP ---
+    // --- CARREGAR CONFIGURAÇÕES SALVAS E DADOS REAIS AO ABRIR ---
     window.onload = function() {
         if(localStorage.getItem('cfgShopee')) document.getElementById('cfgShopee').value = localStorage.getItem('cfgShopee');
         if(localStorage.getItem('cfgML')) document.getElementById('cfgML').value = localStorage.getItem('cfgML');
         if(localStorage.getItem('cfgTikTok')) document.getElementById('cfgTikTok').value = localStorage.getItem('cfgTikTok');
         if(localStorage.getItem('cfgFace')) document.getElementById('cfgFace').value = localStorage.getItem('cfgFace');
         if(localStorage.getItem('cfgInsta')) document.getElementById('cfgInsta').value = localStorage.getItem('cfgInsta');
+
+        carregarDadosReaisPainel();
     };
 
-    // --- DADOS SIMULADOS DE HISTÓRICO E RELATÓRIOS ---
-    const dadosRelatorios = {
-        diario: [
-            { produto: "AirFryer Digital 4L", plataforma: "Shopee", data: "Hoje, 10:30", cliques: 142, renda: 65.50 },
-            { produto: "Kit Pincéis de Maquiagem", plataforma: "Instagram", data: "Hoje, 08:15", cliques: 98, renda: 32.20 }
-        ],
-        semanal: [
-            { produto: "AirFryer Digital 4L", plataforma: "Shopee", data: "24/10", cliques: 620, renda: 280.00 },
-            { produto: "Smartwatch D20", plataforma: "Mercado Livre", data: "22/10", cliques: 450, renda: 190.00 },
-            { produto: "Mini Processador de Alimentos", plataforma: "TikTok Shop", data: "20/10", cliques: 380, renda: 140.50 }
-        ],
-        quinzenal: [
-            { produto: "Kit Potes Herméticos 10pçs", plataforma: "Shopee", data: "15/10", cliques: 1250, renda: 510.00 },
-            { produto: "AirFryer Digital 4L", plataforma: "Shopee", data: "10/10", cliques: 1600, renda: 680.00 }
-        ],
-        mensal: [
-            { produto: "Lote Geral Utensílios Cozinha", plataforma: "Shopee / ML", data: "Outubro/2026", cliques: 5400, renda: 2350.00 },
-            { produto: "Achadinhos de Moda & Beleza", plataforma: "Instagram / TikTok", data: "Outubro/2026", cliques: 4100, renda: 1820.00 }
-        ],
-        anual: [
-            { produto: "Consolidado Geral de Campanhas", plataforma: "Todas", data: "Ano 2026", cliques: 45000, renda: 18900.00 }
-        ]
-    };
+    // --- BUSCAR DADOS REAIS DO BANCO DE DADOS ---
+    async function carregarDadosReaisPainel() {
+        try {
+            const response = await fetch('/api/relatorios');
+            const relatorios = await response.json();
+
+            let totalRendaGeral = 0;
+            let totalCliquesGeral = 0;
+
+            relatorios.forEach(item => {
+                totalRendaGeral += parseFloat(item.renda || 0);
+                totalCliquesGeral += parseInt(item.cliques || 0);
+            });
+
+            // Atualiza o gráfico em arco com o valor real do banco
+            const elementoComissao = document.getElementById('totalComissao');
+            if (elementoComissao) {
+                elementoComissao.innerText = `R$ ${totalRendaGeral.toFixed(2).replace('.', ',')}`;
+            }
+        } catch (err) {
+            console.error('Erro ao carregar dados do painel:', err);
+        }
+    }
+
+    async function carregarRelatoriosReais(btnElement) {
+        document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+        if(btnElement) btnElement.classList.add('active');
+
+        try {
+            const response = await fetch('/api/relatorios');
+            const lista = await response.json();
+            const tbody = document.getElementById('tabela-corpo');
+            tbody.innerHTML = '';
+
+            let totalCliques = 0;
+            let totalRenda = 0;
+
+            if (lista.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #888;">Nenhum produto cadastrado no banco de dados ainda.</td></tr>`;
+            }
+
+            lista.forEach(item => {
+                const cliques = parseInt(item.cliques || 0);
+                const renda = parseFloat(item.renda || 0);
+
+                totalCliques += cliques;
+                totalRenda += renda;
+
+                const dataFormatada = new Date(item.data).toLocaleDateString('pt-BR');
+
+                const tr = document.createElement('tr');
+                tr.onclick = () => abrirDetalhes(item);
+                tr.innerHTML = `
+                    <td><strong>${item.titulo}</strong></td>
+                    <td><span class="badge">${item.plataforma}</span></td>
+                    <td style="color: #666; font-size: 13px;">${dataFormatada}</td>
+                    <td style="text-align: center;">${cliques.toLocaleString()}</td>
+                    <td style="text-align: right; font-weight: bold; color: #2a9d8f;">R$ ${renda.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('total-cli').innerText = totalCliques.toLocaleString();
+            document.getElementById('total-val').innerText = `R$ ${totalRenda.toFixed(2)}`;
+        } catch (err) {
+            console.error('Erro ao carregar tabela de relatórios:', err);
+        }
+    }
 
     // --- CONTROLE DE ABAS ---
     function mudarAba(abaId) {
@@ -610,122 +656,109 @@
         if (abaId === 'dashboard') {
             document.getElementById('tab-dashboard').classList.add('active');
             document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            carregarDadosReaisPainel();
         } else if (abaId === 'relatorios') {
             document.getElementById('tab-relatorios').classList.add('active');
             document.querySelectorAll('.tab-btn')[1].classList.add('active');
-            filtrarRelatorio('diario', document.querySelector('.filter-btn'));
+            carregarRelatoriosReais(document.querySelector('.filter-btn'));
         }
     }
 
-    // --- FILTRAR RELATÓRIO ---
-    function filtrarRelatorio(periodo, btnElement) {
-        document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
-        if(btnElement) btnElement.classList.add('active');
-
-        const lista = dadosRelatorios[periodo] || [];
-        const tbody = document.getElementById('tabela-corpo');
-        tbody.innerHTML = '';
-
-        let totalCliques = 0;
-        let totalRenda = 0;
-
-        lista.forEach(item => {
-            totalCliques += item.cliques;
-            totalRenda += item.renda;
-
-            const tr = document.createElement('tr');
-            tr.onclick = () => abrirDetalhes(item);
-            tr.innerHTML = `
-                <td><strong>${item.produto}</strong></td>
-                <td><span class="badge">${item.plataforma}</span></td>
-                <td style="color: #666; font-size: 13px;">${item.data}</td>
-                <td style="text-align: center;">${item.cliques.toLocaleString()}</td>
-                <td style="text-align: right; font-weight: bold; color: #2a9d8f;">R$ ${item.renda.toFixed(2)}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-
-        document.getElementById('total-cli').innerText = totalCliques.toLocaleString();
-        document.getElementById('total-val').innerText = `R$ ${totalRenda.toFixed(2)}`;
-    }
-
     // --- MODAL CONFIGURAÇÕES (CATRACA) COM LOCALSTORAGE ---
-    function abrirConfiguracoes() {
-        document.getElementById('modalConfig').style.display = 'flex';
-    }
-    function fecharConfiguracoes() {
-        document.getElementById('modalConfig').style.display = 'none';
-    }
+    function abrirConfiguracoes() { document.getElementById('modalConfig').style.display = 'flex'; }
+    function fecharConfiguracoes() { document.getElementById('modalConfig').style.display = 'none'; }
     function salvarConfiguracoes() {
         localStorage.setItem('cfgShopee', document.getElementById('cfgShopee').value);
         localStorage.setItem('cfgML', document.getElementById('cfgML').value);
         localStorage.setItem('cfgTikTok', document.getElementById('cfgTikTok').value);
         localStorage.setItem('cfgFace', document.getElementById('cfgFace').value);
         localStorage.setItem('cfgInsta', document.getElementById('cfgInsta').value);
-        
-        alert('Configurações de lojas e links guardadas com sucesso no dispositivo!');
+        alert('Configurações salvas com sucesso no dispositivo!');
         fecharConfiguracoes();
     }
 
-    // --- MODAL DETALHES DO ITEM ---
+    // --- MODAL DETALHES ---
     function abrirDetalhes(item) {
         const conteudo = document.getElementById('conteudoDetalhes');
         conteudo.innerHTML = `
-            <p><strong>Produto:</strong> ${item.produto}</p>
-            <p><strong>Plataforma de Divulgação:</strong> ${item.plataforma}</p>
-            <p><strong>Data da Postagem:</strong> ${item.data}</p>
-            <p><strong>Cliques Gerados:</strong> ${item.cliques.toLocaleString()}</p>
-            <p><strong>Comissão Estimada:</strong> <span style="color: #2a9d8f; font-weight: bold;">R$ ${item.renda.toFixed(2)}</span></p>
-            <hr style="border:0; border-top:1px solid #eee; margin: 15px 0;">
-            <p style="font-size: 12px; color: #666;"><i class="fa-solid fa-circle-info" style="color: var(--primary-dark);"></i> Cópias e postagens geradas automaticamente pelo sistema de IA para maximizar conversões.</p>
+            <p><strong>Produto:</strong> ${item.titulo}</p>
+            <p><strong>Plataforma:</strong> ${item.plataforma}</p>
+            <p><strong>Preço:</strong> R$ ${parseFloat(item.preco || 0).toFixed(2)}</p>
+            <p><strong>Cliques Reais:</strong> ${item.cliques || 0}</p>
+            <p><strong>Renda Gerada:</strong> <span style="color: #2a9d8f; font-weight: bold;">R$ ${parseFloat(item.renda || 0).toFixed(2)}</span></p>
         `;
         document.getElementById('modalDetalhes').style.display = 'flex';
     }
-    function fecharDetalhes() {
-        document.getElementById('modalDetalhes').style.display = 'none';
-    }
+    function fecharDetalhes() { document.getElementById('modalDetalhes').style.display = 'none'; }
 
-    // --- FORMULÁRIO E COPIAR COM 1 CLIQUE ---
+    // --- FORMULÁRIO DE CADASTRO E IA ---
     const form = document.getElementById('produtoForm');
     const resultadoBox = document.getElementById('resultadoBox');
     const resultadoCopy = document.getElementById('resultadoCopy');
+    let produtoCadastradoId = null;
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const linkOriginal = document.getElementById('link_original').value;
+        const link_original = document.getElementById('link_original').value;
         const titulo = document.getElementById('titulo').value;
         const plataforma = document.getElementById('plataforma').value;
         const preco = parseFloat(document.getElementById('preco').value) || 0;
+        const comissao_estimada = parseFloat(document.getElementById('comissao_estimada').value) || 5.00;
+        
+        // Pega o link configurado na catraca se houver, senão usa o original
+        let link_afiliado = link_original;
+        if(plataforma === 'Shopee' && localStorage.getItem('cfgShopee')) link_afiliado = localStorage.getItem('cfgShopee');
+        if(plataforma === 'Mercado Livre' && localStorage.getItem('cfgML')) link_afiliado = localStorage.getItem('cfgML');
 
         resultadoBox.style.display = 'block';
-        resultadoCopy.innerText = '⏳ A processar os dados e a gerar cópia de alta conversão com a IA...';
+        resultadoCopy.innerText = '⏳ Salvando no banco de dados e gerando copy com a IA do Gemini...';
 
-        setTimeout(() => {
-            const textoGerado = `✨ Olha esse achadinho que separei para vocês!\n\n📦 ${titulo}\n💰 Por apenas R$ ${preco.toFixed(2)}\n\n👉 Garanta o seu aqui: ${linkOriginal}\n\n#AchadinhosFabi #${plataforma.replace(/\s+/g, '')} #AchadoImperdivel`;
-            resultadoCopy.innerText = textoGerado;
+        try {
+            // 1. Salvar no Banco de Dados Real via API Node
+            const resProd = await fetch('/api/produtos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ titulo, plataforma, preco, comissao_estimada, link_original, link_afiliado })
+            });
+            const dataProd = await resProd.json();
+            
+            if (!resProd.ok) throw new Error(dataProd.error || 'Erro ao cadastrar produto');
+
+            produtoCadastradoId = dataProd.produto.id;
+
+            // 2. Chamar IA do Gemini para gerar a Copy
+            const resCopy = await fetch(`/api/gerar-copy/${produtoCadastradoId}`, { method: 'POST' });
+            const dataCopy = await resCopy.json();
+
+            if (resCopy.ok) {
+                resultadoCopy.innerText = dataCopy.copyPronta;
+            } else {
+                resultadoCopy.innerText = `Produto salvo, mas houve um erro na IA: ${dataCopy.error}`;
+            }
+
             form.reset();
-        }, 1200);
+            carregarDadosReaisPainel();
+        } catch (err) {
+            resultadoCopy.innerText = `❌ Erro: ${err.message}`;
+        }
     });
 
     function copiarCopyParaClipboard() {
         const texto = resultadoCopy.innerText;
         navigator.clipboard.writeText(texto).then(() => {
-            alert('📋 Copy copiada com sucesso! Agora é só colar no WhatsApp, Instagram ou Facebook.');
-        }).err(err => {
-            alert('Erro ao copiar texto.');
+            alert('📋 Copy copiada com sucesso para a área de transferência!');
         });
     }
 
     function iniciarAutomacao() {
         const status = document.getElementById('statusAuto');
-        status.innerHTML = '🤖 Robô ativado! A monitorizar e a publicar achados automaticamente...';
+        status.innerHTML = '🤖 Robô ativado! Sincronizando com as APIs...';
         setTimeout(() => {
-            status.innerHTML = '✅ 3 novos achados processados e publicados automaticamente com sucesso nas redes!';
-        }, 3000);
+            status.innerHTML = '✅ Sistema pronto para capturar os achados automaticamente!';
+        }, 2000);
     }
 
-    // Fechar modais ao clicar fora
     window.onclick = function(event) {
         if (event.target.classList.contains('modal')) {
             event.target.style.display = 'none';
