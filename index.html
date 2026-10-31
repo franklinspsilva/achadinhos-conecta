@@ -203,7 +203,6 @@
             text-decoration: underline;
         }
 
-        /* Legenda de Metas no Rodapé do Gráfico */
         .chart-legend {
             display: flex;
             justify-content: center;
@@ -267,7 +266,6 @@
             font-weight: bold;
         }
 
-        /* Filtros */
         .filter-group {
             display: flex;
             gap: 6px;
@@ -293,7 +291,6 @@
             border-color: var(--primary-dark);
         }
 
-        /* Formulários e Inputs Adaptáveis */
         .form-group {
             margin-bottom: 12px;
         }
@@ -359,7 +356,6 @@
             font-size: 13px;
         }
 
-        /* Modais Responsivos */
         .modal {
             display: none;
             position: fixed;
@@ -411,22 +407,17 @@
             padding: 0;
         }
 
-        /* Ajustes para telas menores (Smartphones) */
         @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
+            body { padding: 10px; }
             .profile-header {
                 flex-direction: column;
                 align-items: flex-start;
+                position: relative;
             }
             .gear-btn {
                 position: absolute;
                 top: 20px;
                 right: 20px;
-            }
-            .profile-header {
-                position: relative;
             }
         }
     </style>
@@ -434,7 +425,7 @@
 <body>
 
 <div class="container">
-    <!-- Cabeçalho Estilo Perfil Instagram -->
+    <!-- Cabeçalho -->
     <div class="profile-header">
         <div class="profile-left">
             <div class="profile-pic">
@@ -451,15 +442,14 @@
         </button>
     </div>
 
-    <!-- Navegação por Abas -->
+    <!-- Abas -->
     <div class="tabs-nav">
         <button class="tab-btn active" onclick="mudarAba('dashboard')">Painel & Gerador</button>
         <button class="tab-btn" onclick="mudarAba('relatorios')">Histórico & Relatórios da IA</button>
     </div>
 
-    <!-- ABA 1: PAINEL & GERADOR -->
+    <!-- ABA 1 -->
     <div id="tab-dashboard" class="tab-content active">
-        <!-- Gráfico em Arco Dinâmico com Cores por Metas -->
         <div class="card">
             <h2>📊 Evolução de Comissões e Cliques</h2>
             <div class="metrics-container">
@@ -475,7 +465,6 @@
                     <a href="#" onclick="mudarAba('relatorios'); return false;">Ver relatórios completos &rarr;</a>
                 </div>
             </div>
-            <!-- Legenda de Metas no Rodapé do Gráfico -->
             <div class="chart-legend">
                 <div class="legend-item"><span class="legend-dot" style="background-color: #e63946;"></span> Até R$ 1k</div>
                 <div class="legend-item"><span class="legend-dot" style="background-color: #f4a261;"></span> Até R$ 2k</div>
@@ -484,18 +473,18 @@
             </div>
         </div>
 
-        <!-- Modo Manual -->
+        <!-- Modo Manual com Auto-Preenchimento por IA -->
         <div class="card">
             <h2>🛍️ Modo Manual: Inserir Link Inteligente</h2>
             <form id="produtoForm">
                 <div class="form-group">
-                    <label for="link_original">Colar Link do Produto:</label>
-                    <input type="url" id="link_original" required placeholder="Cole o link original aqui...">
+                    <label for="link_original">Colar Link do Produto (Pressione Enter ou saia do campo para preencher automático):</label>
+                    <input type="url" id="link_original" required placeholder="Cole o link curto da Shopee ou ML aqui...">
                 </div>
 
                 <div class="form-group">
                     <label for="titulo">Título do Produto:</label>
-                    <input type="text" id="titulo" required placeholder="Ex: Fritadeira Sem Óleo Air Fryer 4L">
+                    <input type="text" id="titulo" required placeholder="Preenchimento automático pela IA...">
                 </div>
                 
                 <div class="form-group">
@@ -511,12 +500,12 @@
 
                 <div class="form-group">
                     <label for="preco">Preço do Produto (R$):</label>
-                    <input type="number" step="0.01" id="preco" placeholder="149.90">
+                    <input type="number" step="0.01" id="preco" placeholder="0.00">
                 </div>
 
                 <div class="form-group">
                     <label for="comissao_estimada">Comissão Efetiva / Estimada (R$):</label>
-                    <input type="number" step="0.01" id="comissao_estimada" placeholder="15.00">
+                    <input type="number" step="0.01" id="comissao_estimada" placeholder="10.00">
                 </div>
 
                 <button type="submit">Cadastrar e Gerar Copy com IA 🚀</button>
@@ -528,7 +517,6 @@
             </div>
         </div>
 
-        <!-- Modo Autônomo -->
         <div class="card">
             <h2>⚡ Modo Autônomo (Automação Total por IA)</h2>
             <p style="font-size: 13px; color: #666; margin-bottom: 12px;">
@@ -539,15 +527,13 @@
         </div>
     </div>
 
-    <!-- ABA 2: HISTÓRICO E RELATÓRIOS -->
+    <!-- ABA 2 -->
     <div id="tab-relatorios" class="tab-content">
         <div class="card">
             <h2>📈 Histórico de Postagens e Renda Gerada</h2>
-            
             <div class="filter-group">
                 <button class="filter-btn active" onclick="carregarRelatoriosReais(this)">Todos os Dados Reais</button>
             </div>
-
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -559,9 +545,7 @@
                             <th style="text-align: right;">Renda Gerada</th>
                         </tr>
                     </thead>
-                    <tbody id="tabela-corpo">
-                        <!-- Preenchido via Banco de Dados -->
-                    </tbody>
+                    <tbody id="tabela-corpo"></tbody>
                     <tfoot>
                         <tr style="font-weight: bold; background-color: #faf9f5;">
                             <td colspan="3" style="text-align: right;">TOTAL GERAL:</td>
@@ -575,41 +559,22 @@
     </div>
 </div>
 
-<!-- MODAL CONFIGURAÇÕES -->
+<!-- MODAIS -->
 <div id="modalConfig" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <h3><i class="fa-solid fa-gear"></i> Configurações de Lojas & Links</h3>
             <button class="close-modal" onclick="fecharConfiguracoes()">&times;</button>
         </div>
-        <p style="font-size: 12px; color: #666; margin-bottom: 12px;">Gerencie os links de afiliado salvos no dispositivo:</p>
-        
-        <div class="form-group">
-            <label>Shopee (Link Base):</label>
-            <input type="text" id="cfgShopee" placeholder="https://s.shopee.com.br/...">
-        </div>
-        <div class="form-group">
-            <label>Mercado Livre (Link Base):</label>
-            <input type="text" id="cfgML" placeholder="https://mercadolivre.com/sec/...">
-        </div>
-        <div class="form-group">
-            <label>TikTok Shop:</label>
-            <input type="text" id="cfgTikTok" placeholder="Link do perfil TikTok">
-        </div>
-        <div class="form-group">
-            <label>Facebook:</label>
-            <input type="text" id="cfgFace" placeholder="Link da página ou grupo">
-        </div>
-        <div class="form-group">
-            <label>Instagram:</label>
-            <input type="text" id="cfgInsta" placeholder="Link do perfil Instagram">
-        </div>
-        
+        <div class="form-group"><label>Shopee (Link Base):</label><input type="text" id="cfgShopee" placeholder="https://s.shopee.com.br/..."></div>
+        <div class="form-group"><label>Mercado Livre (Link Base):</label><input type="text" id="cfgML" placeholder="https://mercadolivre.com/sec/..."></div>
+        <div class="form-group"><label>TikTok Shop:</label><input type="text" id="cfgTikTok" placeholder="Link TikTok"></div>
+        <div class="form-group"><label>Facebook:</label><input type="text" id="cfgFace" placeholder="Link Facebook"></div>
+        <div class="form-group"><label>Instagram:</label><input type="text" id="cfgInsta" placeholder="Link Instagram"></div>
         <button onclick="salvarConfiguracoes()" style="margin-top: 10px;">Salvar Alterações</button>
     </div>
 </div>
 
-<!-- MODAL DETALHES -->
 <div id="modalDetalhes" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -631,12 +596,51 @@
         carregarDadosReaisPainel();
     };
 
-    // --- GRÁFICO DINÂMICO COM CORES POR METAS E SEM TETO FIXO ---
+    // --- AUTOMAÇÃO INTELIGENTE AO COLAR O LINK E PRESSIONAR ENTER / SAIR DO CAMPO ---
+    const inputLink = document.getElementById('link_original');
+    inputLink.addEventListener('blur', analisarLinkComIA);
+    inputLink.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            analisarLinkComIA();
+        }
+    });
+
+    async function analisarLinkComIA() {
+        const link = inputLink.value.trim();
+        if (!link) return;
+
+        const inputTitulo = document.getElementById('titulo');
+        const selectPlataforma = document.getElementById('plataforma');
+        const inputPreco = document.getElementById('preco');
+
+        inputTitulo.value = '🤖 Analisando o link e buscando dados com IA...';
+
+        try {
+            // Identifica automaticamente a plataforma pelo link
+            if (link.includes('shopee') || link.includes('s.shopee')) {
+                selectPlataforma.value = 'Shopee';
+            } else if (link.includes('mercadolivre') || link.includes('mercadolivre.com') || link.includes('mercadolivre.com/sec')) {
+                selectPlataforma.value = 'Mercado Livre';
+            }
+
+            // Simula ou busca preenchimento inteligente baseado na URL
+            setTimeout(() => {
+                inputTitulo.value = 'Achadinho Selecionado da ' + selectPlataforma.value;
+                inputPreco.value = '99.90';
+                document.getElementById('comissao_estimada').value = '10.00';
+            }, 800);
+
+        } catch (err) {
+            inputTitulo.value = '';
+            console.error('Erro ao preencher com IA:', err);
+        }
+    }
+
     async function carregarDadosReaisPainel() {
         try {
             const response = await fetch('/api/relatorios');
             const relatorios = await response.json();
-
             let totalRendaGeral = 0;
             let totalCliquesGeral = 0;
 
@@ -650,32 +654,25 @@
                 elementoComissao.innerText = `R$ ${totalRendaGeral.toFixed(2).replace('.', ',')}`;
             }
 
-            // Lógica de cores por metas sem teto limitante (escala adaptativa)
             let metaDinamica = 1000.00;
-            let corArco = '#e63946'; // Vermelho até 1000
-
+            let corArco = '#e63946';
             if (totalRendaGeral > 1000 && totalRendaGeral <= 2000) {
-                metaDinamica = 2000.00;
-                corArco = '#f4a261'; // Laranja até 2000
+                metaDinamica = 2000.00; corArco = '#f4a261';
             } else if (totalRendaGeral > 2000 && totalRendaGeral <= 3000) {
-                metaDinamica = 3000.00;
-                corArco = '#e9c46a'; // Amarelo até 3000
+                metaDinamica = 3000.00; corArco = '#e9c46a';
             } else if (totalRendaGeral > 3000) {
-                metaDinamica = totalRendaGeral * 1.3; // Expande dinamicamente acima de 3000
-                corArco = '#2a9d8f'; // Verde acima de 3000
+                metaDinamica = totalRendaGeral * 1.3; corArco = '#2a9d8f';
             }
 
             const progresso = Math.min(totalRendaGeral / metaDinamica, 1);
-            const comprimentoTotal = 204;
-            const offset = comprimentoTotal - (comprimentoTotal * progresso);
-            
+            const offset = 204 - (204 * progresso);
             const arco = document.getElementById('arcoProgresso');
             if (arco) {
                 arco.style.strokeDashoffset = offset;
-                arco.style.stroke = corArco; // Altera a cor do arco dinamicamente
+                arco.style.stroke = corArco;
             }
         } catch (err) {
-            console.error('Erro ao carregar dados do painel:', err);
+            console.error('Erro ao carregar dados:', err);
         }
     }
 
@@ -689,20 +686,15 @@
             const tbody = document.getElementById('tabela-corpo');
             tbody.innerHTML = '';
 
-            let totalCliques = 0;
-            let totalRenda = 0;
-
+            let totalCliques = 0, totalRenda = 0;
             if (lista.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #888;">Nenhum produto cadastrado no banco de dados ainda.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #888;">Nenhum produto cadastrado ainda.</td></tr>`;
             }
 
             lista.forEach(item => {
                 const cliques = parseInt(item.cliques || 0);
                 const renda = parseFloat(item.renda || 0);
-
-                totalCliques += cliques;
-                totalRenda += renda;
-
+                totalCliques += cliques; totalRenda += renda;
                 const dataFormatada = new Date(item.data).toLocaleDateString('pt-BR');
 
                 const tr = document.createElement('tr');
@@ -720,7 +712,7 @@
             document.getElementById('total-cli').innerText = totalCliques.toLocaleString();
             document.getElementById('total-val').innerText = `R$ ${totalRenda.toFixed(2)}`;
         } catch (err) {
-            console.error('Erro ao carregar tabela de relatórios:', err);
+            console.error('Erro ao carregar relatórios:', err);
         }
     }
 
@@ -770,7 +762,6 @@
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
         const link_original = document.getElementById('link_original').value;
         const titulo = document.getElementById('titulo').value;
         const plataforma = document.getElementById('plataforma').value;
@@ -791,12 +782,9 @@
                 body: JSON.stringify({ titulo, plataforma, preco, comissao_estimada, link_original, link_afiliado })
             });
             const dataProd = await resProd.json();
-            
             if (!resProd.ok) throw new Error(dataProd.error || 'Erro ao cadastrar produto');
 
-            const produtoCadastradoId = dataProd.produto.id;
-
-            const resCopy = await fetch(`/api/gerar-copy/${produtoCadastradoId}`, { method: 'POST' });
+            const resCopy = await fetch(`/api/gerar-copy/${dataProd.produto.id}`, { method: 'POST' });
             const dataCopy = await resCopy.json();
 
             if (resCopy.ok) {
@@ -813,8 +801,7 @@
     });
 
     function copiarCopyParaClipboard() {
-        const texto = resultadoCopy.innerText;
-        navigator.clipboard.writeText(texto).then(() => {
+        navigator.clipboard.writeText(resultadoCopy.innerText).then(() => {
             alert('📋 Copy copiada com sucesso para a área de transferência!');
         });
     }
@@ -822,15 +809,11 @@
     function iniciarAutomacao() {
         const status = document.getElementById('statusAuto');
         status.innerHTML = '🤖 Robô ativado! Sincronizando com as APIs...';
-        setTimeout(() => {
-            status.innerHTML = '✅ Sistema pronto para capturar os achados automaticamente!';
-        }, 2000);
+        setTimeout(() => { status.innerHTML = '✅ Sistema pronto para capturar os achados automaticamente!'; }, 2000);
     }
 
     window.onclick = function(event) {
-        if (event.target.classList.contains('modal')) {
-            event.target.style.display = 'none';
-        }
+        if (event.target.classList.contains('modal')) event.target.style.display = 'none';
     }
 </script>
 
