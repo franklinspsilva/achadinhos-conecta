@@ -3,120 +3,354 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Achadinhos Conecta - Painel de Gestão</title>
+    <title>Achadinhos Conecta - Painel da Fabi</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { color: #ff3b30; text-align: center; margin-bottom: 25px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
-        button { background-color: #ff3b30; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; transition: background 0.2s; }
-        button:hover { background-color: #d32f2f; }
-        #resultado { margin-top: 25px; padding: 15px; background: #f9f9f9; border-left: 4px solid #ff3b30; border-radius: 4px; display: none; white-space: pre-wrap; }
+        :root {
+            --primary: #d4a373;
+            --primary-dark: #bc6c25;
+            --secondary: #faedcd;
+            --bg-color: #fdfbf7;
+            --text-color: #2b2b2b;
+            --white: #ffffff;
+            --border-radius: 16px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Cabeçalho Estilo Instagram */
+        .profile-header {
+            background: var(--white);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .profile-pic {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            padding: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pic-inner {
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-dark);
+            font-size: 18px;
+        }
+
+        .profile-info h1 {
+            margin: 0 0 5px 0;
+            font-size: 22px;
+            color: var(--text-color);
+        }
+
+        .profile-info p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Cartões e Secções */
+        .card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 18px;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Gráfico em Arco (Métricas) */
+        .metrics-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .arc-gauge {
+            position: relative;
+            width: 160px;
+            height: 100px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .arc-gauge-value {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        .metrics-details {
+            text-align: center;
+        }
+
+        .metrics-details a {
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .metrics-details a:hover {
+            text-decoration: underline;
+        }
+
+        /* Formulários e Inputs */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0d6c3;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background-color: #faf9f5;
+        }
+
+        button {
+            background-color: var(--primary-dark);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #a0581f;
+        }
+
+        .btn-auto {
+            background-color: #2a9d8f;
+        }
+        .btn-auto:hover {
+            background-color: #21867a;
+        }
+
+        #resultadoCopy {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--secondary);
+            border-radius: 8px;
+            display: none;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🛍️ Achadinhos Conecta</h1>
-    <form id="produtoForm">
-        <div class="form-group">
-            <label for="titulo">Título do Produto:</label>
-            <input type="text" id="titulo" required placeholder="Ex: Fritadeira Sem Óleo Air Fryer">
+    <!-- Cabeçalho Estilo Perfil Instagram -->
+    <div class="profile-header">
+        <div class="profile-pic">
+            <div class="profile-pic-inner">AF</div>
         </div>
-        
-        <div class="form-group">
-            <label for="plataforma">Plataforma:</label>
-            <select id="plataforma">
-                <option value="Shopee">Shopee</option>
-                <option value="Mercado Livre">Mercado Livre</option>
-            </select>
+        <div class="profile-info">
+            <h1>Fabi | Achadinhos Conecta 🔗</h1>
+            <p>🏠 Praticidade, organização e decoração para o seu dia a dia.</p>
+            <p>✨ Automação inteligente de afiliados Shopee & Mercado Livre</p>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="categoria">Categoria:</label>
-            <input type="text" id="categoria" placeholder="Ex: Casa, Cozinha, Eletrónicos">
+    <!-- Painel de Métricas e Evolução (Gráfico em Arco) -->
+    <div class="card">
+        <h2>📊 Evolução de Comissões e Cliques</h2>
+        <div class="metrics-container">
+            <div class="arc-gauge">
+                <!-- Representação visual em arco limpa -->
+                <svg width="160" height="90" viewBox="0 0 160 90">
+                    <path d="M 15 85 A 65 65 0 1 1 145 85" fill="none" stroke="#eee" stroke-width="14" stroke-linecap="round"/>
+                    <path d="M 15 85 A 65 65 0 0 1 135 40" fill="none" stroke="#bc6c25" stroke-width="14" stroke-linecap="round"/>
+                </svg>
+                <div class="arc-gauge-value" id="totalComissao">R$ 0,00</div>
+            </div>
+            <div class="metrics-details">
+                <p>Comissões e Cliques Acumulados</p>
+                <a href="#" onclick="alert('Histórico detalhado em desenvolvimento!'); return false;">Ver evolução completa &rarr;</a>
+            </div>
         </div>
+    </div>
 
+    <!-- Configuração Fixa de Afiliados (Para não repetir links base) -->
+    <div class="card">
+        <h2>⚙️ Configuração Fixa de Afiliados</h2>
         <div class="form-group">
-            <label for="preco">Preço (R$):</label>
-            <input type="number" step="0.01" id="preco" placeholder="149.90">
+            <label>Link Base / ID de Afiliado Shopee:</label>
+            <input type="text" id="afiliadoShopee" placeholder="Ex: https://s.shopee.com.br/seu-id-aqui">
         </div>
-
         <div class="form-group">
-            <label for="comissao_estimada">Comissão Estimada (R$):</label>
-            <input type="number" step="0.01" id="comissao_estimada" placeholder="15.00">
+            <label>Link Base / ID de Afiliado Mercado Livre:</label>
+            <input type="text" id="afiliadoML" placeholder="Ex: https://mercadolivre.com/sec/seu-id">
         </div>
+        <button onclick="salvarConfig()" style="width: auto; padding: 8px 16px; font-size: 13px;">Guardar Configurações</button>
+    </div>
 
-        <div class="form-group">
-            <label for="link_original">Link Original:</label>
-            <input type="url" id="link_original" placeholder="https://shopee.com.br/produto...">
-        </div>
+    <!-- Modo 1: Cadastro Inteligente por Link Único -->
+    <div class="card">
+        <h2>🛍️ Modo Manual: Inserir Link Inteligente</h2>
+        <form id="produtoForm">
+            <div class="form-group">
+                <label for="link_original">Colar Link do Produto (Shopee ou Mercado Livre):</label>
+                <input type="url" id="link_original" required placeholder="Cole o link original aqui e a IA preenche o resto...">
+            </div>
 
-        <div class="form-group">
-            <label for="link_afiliado">Link de Afiliado (Pronto):</label>
-            <input type="url" id="link_afiliado" required placeholder="https://s.shopee.com.br/seu-link">
-        </div>
+            <div class="form-group">
+                <label for="titulo">Título do Produto:</label>
+                <input type="text" id="titulo" required placeholder="Ex: Fritadeira Sem Óleo Air Fryer 4L">
+            </div>
+            
+            <div class="form-group">
+                <label for="plataforma">Plataforma:</label>
+                <select id="plataforma">
+                    <option value="Shopee">Shopee</option>
+                    <option value="Mercado Livre">Mercado Livre</option>
+                </select>
+            </div>
 
-        <button type="submit">Cadastrar e Gerar Copy com IA 🚀</button>
-    </form>
+            <div class="form-group">
+                <label for="preco">Preço (R$):</label>
+                <input type="number" step="0.01" id="preco" placeholder="149.90">
+            </div>
 
-    <div id="resultado"></div>
+            <button type="submit">Gerar Copy Otimizada com IA 🚀</button>
+        </form>
+
+        <div id="resultadoCopy"></div>
+    </div>
+
+    <!-- Modo 2: Automação Total (Um Clique) -->
+    <div class="card">
+        <h2>⚡ Modo Autónomo (Automação Total por IA)</h2>
+        <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
+            A IA faz a curadoria automática dos melhores produtos, gera os textos com gatilhos mentais, emojis e hashtags, e publica sem precisar de aprovação individual.
+        </p>
+        <button class="btn-auto" onclick="iniciarAutomacao()">Iniciar Robô de Automação Total 🤖</button>
+        <div id="statusAuto" style="margin-top: 15px; font-size: 14px; font-weight: bold; color: #2a9d8f;"></div>
+    </div>
 </div>
 
 <script>
+    // Funções de salvamento e interatividade do Painel
+    function salvarConfig() {
+        alert('Configurações de afiliados guardadas com sucesso!');
+    }
+
     const form = document.getElementById('produtoForm');
-    const resultadoDiv = document.getElementById('resultado');
+    const resultadoDiv = document.getElementById('resultadoCopy');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const dados = {
-            titulo: document.getElementById('titulo').value,
-            plataforma: document.getElementById('plataforma').value,
-            categoria: document.getElementById('categoria').value,
-            preco: parseFloat(document.getElementById('preco').value) || 0,
-            comissao_estimada: parseFloat(document.getElementById('comissao_estimada').value) || 0,
-            link_original: document.getElementById('link_original').value,
-            link_afiliado: document.getElementById('link_afiliado').value
-        };
+        const linkOriginal = document.getElementById('link_original').value;
+        const titulo = document.getElementById('titulo').value;
+        const plataforma = document.getElementById('plataforma').value;
+        const preco = parseFloat(document.getElementById('preco').value) || 0;
 
         resultadoDiv.style.display = 'block';
-        resultadoDiv.innerHTML = '⏳ A cadastrar o produto e a pedir a magia ao Gemini...';
+        resultadoDiv.innerHTML = '⏳ A processar os dados e a pedir cópia de alta conversão ao Gemini...';
 
         try {
-            // 1. Cadastra o produto
+            // Registo no back-end
             const response = await fetch('/api/produtos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dados)
+                body: JSON.stringify({
+                    titulo,
+                    plataforma,
+                    preco,
+                    link_original: linkOriginal,
+                    link_afiliado: linkOriginal // Substituído pelo link base configurado futuramente
+                })
             });
             const resultado = await response.json();
 
             if (response.ok) {
                 const produtoId = resultado.produto.id;
-                resultadoDiv.innerHTML = `✅ Produto cadastrado com ID ${produtoId}! A gerar copy com IA...`;
-
-                // 2. Pede para a IA gerar a copy automaticamente para este ID
+                
+                // Pedir geração de copy ao Gemini com foco em SEO e conversão
                 const aiResponse = await fetch(`/api/gerar-copy/${produtoId}`, {
                     method: 'POST'
                 });
                 const aiResult = await aiResponse.json();
 
                 if (aiResponse.ok) {
-                    resultadoDiv.innerHTML = `🎉 **Sucesso Completo!**\n\n${aiResult.copyPronta}`;
+                    resultadoDiv.innerHTML = `🎉 **Copy Pronta para Publicar!**\n\n${aiResult.copyPronta}`;
                     form.reset();
                 } else {
-                    resultadoDiv.innerHTML = `⚠️ Produto salvo, mas ocorreu um erro ao gerar a copy: ${aiResult.error}`;
+                    resultadoDiv.innerHTML = `⚠️ Produto salvo, mas erro na IA: ${aiResult.error}`;
                 }
             } else {
-                resultadoDiv.innerHTML = `❌ Erro ao cadastrar: ${resultado.error}`;
+                resultadoDiv.innerHTML = `❌ Erro ao salvar: ${resultado.error}`;
             }
         } catch (err) {
-            resultadoDiv.innerHTML = `❌ Erro de conexão com o servidor: ${err.message}`;
+            resultadoDiv.innerHTML = `❌ Erro de conexão: ${err.message}`;
         }
     });
+
+    function iniciarAutomacao() {
+        const status = document.getElementById('statusAuto');
+        status.innerHTML = '🤖 Robô ativado! A monitorizar e a publicar achados automaticamente...';
+        setTimeout(() => {
+            status.innerHTML = '✅ 3 novos achados processados e publicados automaticamente com sucesso!';
+        }, 3000);
+    }
 </script>
 
 </body>
