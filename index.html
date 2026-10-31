@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Achadinhos Conecta - Painel da Fabi</title>
+    <!-- FontAwesome para ícones (Catraca, Lojas, etc) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #d4a373;
@@ -28,7 +30,7 @@
             margin: 0 auto;
         }
 
-        /* Cabeçalho Estilo Instagram */
+        /* Cabeçalho Estilo Instagram com Catraca */
         .profile-header {
             background: var(--white);
             padding: 25px;
@@ -36,8 +38,14 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.04);
             display: flex;
             align-items: center;
-            gap: 25px;
+            justify-content: space-between;
             margin-bottom: 25px;
+        }
+
+        .profile-left {
+            display: flex;
+            align-items: center;
+            gap: 25px;
         }
 
         .profile-pic {
@@ -74,6 +82,59 @@
             margin: 0;
             color: #666;
             font-size: 14px;
+        }
+
+        /* Botão da Catraca no Topo */
+        .gear-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--primary-dark);
+            padding: 10px;
+            border-radius: 50%;
+            transition: background 0.2s, transform 0.2s;
+            width: auto;
+        }
+
+        .gear-btn:hover {
+            background-color: var(--secondary);
+            transform: rotate(45deg);
+        }
+
+        /* Sistema de Abas */
+        .tabs-nav {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0d6c3;
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: #888;
+            cursor: pointer;
+            padding: 8px 12px;
+            width: auto;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-dark);
+            background-color: var(--secondary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         /* Cartões e Secções */
@@ -137,6 +198,69 @@
             text-decoration: underline;
         }
 
+        /* Tabela de Relatórios */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #faf9f5;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #fdfbf7;
+            cursor: pointer;
+        }
+
+        .badge {
+            background-color: var(--secondary);
+            color: var(--primary-dark);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Filtros de Período */
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .filter-btn {
+            background-color: #faf9f5;
+            border: 1px solid #e0d6c3;
+            color: var(--text-color);
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: auto;
+            font-weight: normal;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-dark);
+            color: white;
+            border-color: var(--primary-dark);
+        }
+
         /* Formulários e Inputs */
         .form-group {
             margin-bottom: 15px;
@@ -192,106 +316,344 @@
             white-space: pre-wrap;
             font-size: 14px;
         }
+
+        /* Modal Customizado (Configurações e Detalhes) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--primary-dark);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #888;
+            width: auto;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Cabeçalho Estilo Perfil Instagram -->
+    <!-- Cabeçalho Estilo Perfil Instagram com Catraca no Topo -->
     <div class="profile-header">
-        <div class="profile-pic">
-            <div class="profile-pic-inner">AF</div>
+        <div class="profile-left">
+            <div class="profile-pic">
+                <div class="profile-pic-inner">AF</div>
+            </div>
+            <div class="profile-info">
+                <h1>Fabi | Achadinhos Conecta 🔗</h1>
+                <p>🏠 Praticidade, organização e decoração para o seu dia a dia.</p>
+                <p>✨ Automação inteligente de afiliados & redes sociais</p>
+            </div>
         </div>
-        <div class="profile-info">
-            <h1>Fabi | Achadinhos Conecta 🔗</h1>
-            <p>🏠 Praticidade, organização e decoração para o seu dia a dia.</p>
-            <p>✨ Automação inteligente de afiliados Shopee & Mercado Livre</p>
+        <!-- Botão Catraca / Configurações -->
+        <button class="gear-btn" onclick="abrirConfiguracoes()" title="Configurações de Lojas e Links">
+            <i class="fa-solid fa-gear"></i>
+        </button>
+    </div>
+
+    <!-- Navegação por Abas -->
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="mudarAba('dashboard')">Painel & Gerador</button>
+        <button class="tab-btn" onclick="mudarAba('relatorios')">Histórico & Relatórios da IA</button>
+    </div>
+
+    <!-- CONTEÚDO DA ABA 1: PAINEL & GERADOR -->
+    <div id="tab-dashboard" class="tab-content active">
+        <!-- Painel de Métricas e Evolução (Gráfico em Arco) -->
+        <div class="card">
+            <h2>📊 Evolução de Comissões e Cliques</h2>
+            <div class="metrics-container">
+                <div class="arc-gauge">
+                    <svg width="160" height="90" viewBox="0 0 160 90">
+                        <path d="M 15 85 A 65 65 0 1 1 145 85" fill="none" stroke="#eee" stroke-width="14" stroke-linecap="round"/>
+                        <path d="M 15 85 A 65 65 0 0 1 135 40" fill="none" stroke="#bc6c25" stroke-width="14" stroke-linecap="round"/>
+                    </svg>
+                    <div class="arc-gauge-value" id="totalComissao">R$ 452,90</div>
+                </div>
+                <div class="metrics-details">
+                    <p>Comissões e Cliques Acumulados</p>
+                    <a href="#" onclick="mudarAba('relatorios'); return false;">Ver relatórios completos &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modo 1: Cadastro Inteligente por Link Único -->
+        <div class="card">
+            <h2>🛍️ Modo Manual: Inserir Link Inteligente</h2>
+            <form id="produtoForm">
+                <div class="form-group">
+                    <label for="link_original">Colar Link do Produto:</label>
+                    <input type="url" id="link_original" required placeholder="Cole o link original aqui e a IA preenche o resto...">
+                </div>
+
+                <div class="form-group">
+                    <label for="titulo">Título do Produto:</label>
+                    <input type="text" id="titulo" required placeholder="Ex: Fritadeira Sem Óleo Air Fryer 4L">
+                </div>
+                
+                <div class="form-group">
+                    <label for="plataforma">Plataforma:</label>
+                    <select id="plataforma">
+                        <option value="Shopee">Shopee</option>
+                        <option value="Mercado Livre">Mercado Livre</option>
+                        <option value="TikTok Shop">TikTok Shop</option>
+                        <option value="Instagram">Instagram</option>
+                        <option value="Facebook">Facebook</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="preco">Preço (R$):</label>
+                    <input type="number" step="0.01" id="preco" placeholder="149.90">
+                </div>
+
+                <button type="submit">Gerar Copy Otimizada com IA 🚀</button>
+            </form>
+
+            <div id="resultadoCopy"></div>
+        </div>
+
+        <!-- Modo 2: Automação Total (Um Clique) -->
+        <div class="card">
+            <h2>⚡ Modo Autónomo (Automação Total por IA)</h2>
+            <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                A IA faz a curadoria automática dos melhores produtos, gera os textos com gatilhos mentais e publica nas redes conectadas.
+            </p>
+            <button class="btn-auto" onclick="iniciarAutomacao()">Iniciar Robô de Automação Total 🤖</button>
+            <div id="statusAuto" style="margin-top: 15px; font-size: 14px; font-weight: bold; color: #2a9d8f;"></div>
         </div>
     </div>
 
-    <!-- Painel de Métricas e Evolução (Gráfico em Arco) -->
-    <div class="card">
-        <h2>📊 Evolução de Comissões e Cliques</h2>
-        <div class="metrics-container">
-            <div class="arc-gauge">
-                <!-- Representação visual em arco limpa -->
-                <svg width="160" height="90" viewBox="0 0 160 90">
-                    <path d="M 15 85 A 65 65 0 1 1 145 85" fill="none" stroke="#eee" stroke-width="14" stroke-linecap="round"/>
-                    <path d="M 15 85 A 65 65 0 0 1 135 40" fill="none" stroke="#bc6c25" stroke-width="14" stroke-linecap="round"/>
-                </svg>
-                <div class="arc-gauge-value" id="totalComissao">R$ 0,00</div>
-            </div>
-            <div class="metrics-details">
-                <p>Comissões e Cliques Acumulados</p>
-                <a href="#" onclick="alert('Histórico detalhado em desenvolvimento!'); return false;">Ver evolução completa &rarr;</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Configuração Fixa de Afiliados (Para não repetir links base) -->
-    <div class="card">
-        <h2>⚙️ Configuração Fixa de Afiliados</h2>
-        <div class="form-group">
-            <label>Link Base / ID de Afiliado Shopee:</label>
-            <input type="text" id="afiliadoShopee" placeholder="Ex: https://s.shopee.com.br/seu-id-aqui">
-        </div>
-        <div class="form-group">
-            <label>Link Base / ID de Afiliado Mercado Livre:</label>
-            <input type="text" id="afiliadoML" placeholder="Ex: https://mercadolivre.com/sec/seu-id">
-        </div>
-        <button onclick="salvarConfig()" style="width: auto; padding: 8px 16px; font-size: 13px;">Guardar Configurações</button>
-    </div>
-
-    <!-- Modo 1: Cadastro Inteligente por Link Único -->
-    <div class="card">
-        <h2>🛍️ Modo Manual: Inserir Link Inteligente</h2>
-        <form id="produtoForm">
-            <div class="form-group">
-                <label for="link_original">Colar Link do Produto (Shopee ou Mercado Livre):</label>
-                <input type="url" id="link_original" required placeholder="Cole o link original aqui e a IA preenche o resto...">
-            </div>
-
-            <div class="form-group">
-                <label for="titulo">Título do Produto:</label>
-                <input type="text" id="titulo" required placeholder="Ex: Fritadeira Sem Óleo Air Fryer 4L">
-            </div>
+    <!-- CONTEÚDO DA ABA 2: HISTÓRICO E RELATÓRIOS DA IA -->
+    <div id="tab-relatorios" class="tab-content">
+        <div class="card">
+            <h2>📈 Histórico de Postagens e Renda Gerada</h2>
             
-            <div class="form-group">
-                <label for="plataforma">Plataforma:</label>
-                <select id="plataforma">
-                    <option value="Shopee">Shopee</option>
-                    <option value="Mercado Livre">Mercado Livre</option>
-                </select>
+            <!-- Filtros de Período -->
+            <div class="filter-group">
+                <button class="filter-btn active" onclick="filtrarRelatorio('diario', this)">Diário</button>
+                <button class="filter-btn" onclick="filtrarRelatorio('semanal', this)">Semanal</button>
+                <button class="filter-btn" onclick="filtrarRelatorio('quinzenal', this)">Quinzenal</button>
+                <button class="filter-btn" onclick="filtrarRelatorio('mensal', this)">Mensal</button>
+                <button class="filter-btn" onclick="filtrarRelatorio('anual', this)">Anual</button>
             </div>
 
-            <div class="form-group">
-                <label for="preco">Preço (R$):</label>
-                <input type="number" step="0.01" id="preco" placeholder="149.90">
+            <!-- Tabela Detalhada -->
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Plataforma</th>
+                            <th>Data / Hora</th>
+                            <th style="text-align: center;">Cliques</th>
+                            <th style="text-align: right;">Renda Gerada</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-corpo">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                    <tfoot>
+                        <tr style="font-weight: bold; background-color: #faf9f5;">
+                            <td colspan="3" style="text-align: right;">TOTAL NO PERÍODO:</td>
+                            <td id="total-cli" style="text-align: center;">0</td>
+                            <td id="total-val" style="text-align: right; color: var(--primary-dark);">R$ 0,00</td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
-
-            <button type="submit">Gerar Copy Otimizada com IA 🚀</button>
-        </form>
-
-        <div id="resultadoCopy"></div>
+        </div>
     </div>
+</div>
 
-    <!-- Modo 2: Automação Total (Um Clique) -->
-    <div class="card">
-        <h2>⚡ Modo Autónomo (Automação Total por IA)</h2>
-        <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
-            A IA faz a curadoria automática dos melhores produtos, gera os textos com gatilhos mentais, emojis e hashtags, e publica sem precisar de aprovação individual.
-        </p>
-        <button class="btn-auto" onclick="iniciarAutomacao()">Iniciar Robô de Automação Total 🤖</button>
-        <div id="statusAuto" style="margin-top: 15px; font-size: 14px; font-weight: bold; color: #2a9d8f;"></div>
+<!-- MODAL DE CONFIGURAÇÕES (ACESSADO PELA CATRACA) -->
+<div id="modalConfig" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-gear"></i> Configurações de Lojas & Links</h3>
+            <button class="close-modal" onclick="fecharConfiguracoes()">&times;</button>
+        </div>
+        <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Gerencie os links de afiliado e dados de acesso das plataformas da Fabi:</p>
+        
+        <div class="form-group">
+            <label>Shopee (Afiliados / Link Base):</label>
+            <input type="text" id="cfgShopee" placeholder="https://s.shopee.com.br/...">
+        </div>
+        <div class="form-group">
+            <label>Mercado Livre (Afiliados / Link Base):</label>
+            <input type="text" id="cfgML" placeholder="https://mercadolivre.com/sec/...">
+        </div>
+        <div class="form-group">
+            <label>TikTok Shop:</label>
+            <input type="text" id="cfgTikTok" placeholder="Link do perfil ou vitrine TikTok">
+        </div>
+        <div class="form-group">
+            <label>Facebook (Página / Grupo):</label>
+            <input type="text" id="cfgFace" placeholder="Link da página ou grupo">
+        </div>
+        <div class="form-group">
+            <label>Instagram (@AchadinhosFabi):</label>
+            <input type="text" id="cfgInsta" placeholder="Link do perfil ou canal de transmissão">
+        </div>
+        
+        <button onclick="salvarConfiguracoes()" style="margin-top: 10px;">Salvar Alterações</button>
+    </div>
+</div>
+
+<!-- MODAL DE DETALHES DO ITEM (AO CLICAR NA TABELA) -->
+<div id="modalDetalhes" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Detalhes da Postagem</h3>
+            <button class="close-modal" onclick="fecharDetalhes()">&times;</button>
+        </div>
+        <div id="conteudoDetalhes" style="font-size: 14px; line-height: 1.6; color: #444;">
+            <!-- Conteúdo dinâmico -->
+        </div>
     </div>
 </div>
 
 <script>
-    // Funções de salvamento e interatividade do Painel
-    function salvarConfig() {
-        alert('Configurações de afiliados guardadas com sucesso!');
+    // --- DADOS SIMULADOS DE HISTÓRICO E RELATÓRIOS ---
+    const dadosRelatorios = {
+        diario: [
+            { produto: "AirFryer Digital 4L", plataforma: "Shopee", data: "Hoje, 10:30", cliques: 142, renda: 65.50 },
+            { produto: "Kit Pincéis de Maquiagem", plataforma: "Instagram", data: "Hoje, 08:15", cliques: 98, renda: 32.20 }
+        ],
+        semanal: [
+            { produto: "AirFryer Digital 4L", plataforma: "Shopee", data: "24/10", cliques: 620, renda: 280.00 },
+            { produto: "Smartwatch D20", plataforma: "Mercado Livre", data: "22/10", cliques: 450, renda: 190.00 },
+            { produto: "Mini Processador de Alimentos", plataforma: "TikTok Shop", data: "20/10", cliques: 380, renda: 140.50 }
+        ],
+        quinzenal: [
+            { produto: "Kit Potes Herméticos 10pçs", plataforma: "Shopee", data: "15/10", cliques: 1250, renda: 510.00 },
+            { produto: "AirFryer Digital 4L", plataforma: "Shopee", data: "10/10", cliques: 1600, renda: 680.00 }
+        ],
+        mensal: [
+            { produto: "Lote Geral Utensílios Cozinha", plataforma: "Shopee / ML", data: "Outubro/2026", cliques: 5400, renda: 2350.00 },
+            { produto: "Achadinhos de Moda & Beleza", plataforma: "Instagram / TikTok", data: "Outubro/2026", cliques: 4100, renda: 1820.00 }
+        ],
+        anual: [
+            { produto: "Consolidado Geral de Campanhas", plataforma: "Todas", data: "Ano 2026", cliques: 45000, renda: 18900.00 }
+        ]
+    };
+
+    // --- CONTROLE DE ABAS ---
+    function mudarAba(abaId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+        if (abaId === 'dashboard') {
+            document.getElementById('tab-dashboard').classList.add('active');
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        } else if (abaId === 'relatorios') {
+            document.getElementById('tab-relatorios').classList.add('active');
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            filtrarRelatorio('diario', document.querySelector('.filter-btn')); // carrega padrão diário
+        }
     }
 
+    // --- FILTRAR RELATÓRIO ---
+    function filtrarRelatorio(periodo, btnElement) {
+        document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+        if(btnElement) btnElement.classList.add('active');
+
+        const lista = dadosRelatorios[periodo] || [];
+        const tbody = document.getElementById('tabela-corpo');
+        tbody.innerHTML = '';
+
+        let totalCliques = 0;
+        let totalRenda = 0;
+
+        lista.forEach(item => {
+            totalCliques += item.cliques;
+            totalRenda += item.renda;
+
+            const tr = document.createElement('tr');
+            tr.onclick = () => abrirDetalhes(item);
+            tr.innerHTML = `
+                <td><strong>${item.produto}</strong></td>
+                <td><span class="badge">${item.plataforma}</span></td>
+                <td style="color: #666; font-size: 13px;">${item.data}</td>
+                <td style="text-align: center;">${item.cliques.toLocaleString()}</td>
+                <td style="text-align: right; font-weight: bold; color: #2a9d8f;">R$ ${item.renda.toFixed(2)}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        document.getElementById('total-cli').innerText = totalCliques.toLocaleString();
+        document.getElementById('total-val').innerText = `R$ ${totalRenda.toFixed(2)}`;
+    }
+
+    // --- MODAL CONFIGURAÇÕES (CATRACA) ---
+    function abrirConfiguracoes() {
+        document.getElementById('modalConfig').style.display = 'flex';
+    }
+    function fecharConfiguracoes() {
+        document.getElementById('modalConfig').style.display = 'none';
+    }
+    function salvarConfiguracoes() {
+        alert('Configurações de lojas e links guardadas com sucesso!');
+        fecharConfiguracoes();
+    }
+
+    // --- MODAL DETALHES DO ITEM ---
+    function abrirDetalhes(item) {
+        const conteudo = document.getElementById('conteudoDetalhes');
+        conteudo.innerHTML = `
+            <p><strong>Produto:</strong> ${item.produto}</p>
+            <p><strong>Plataforma de Divulgação:</strong> ${item.plataforma}</p>
+            <p><strong>Data da Postagem:</strong> ${item.data}</p>
+            <p><strong>Cliques Gerados:</strong> ${item.cliques.toLocaleString()}</p>
+            <p><strong>Comissão Estimada:</strong> <span style="color: #2a9d8f; font-weight: bold;">R$ ${item.renda.toFixed(2)}</span></p>
+            <hr style="border:0; border-top:1px solid #eee; margin: 15px 0;">
+            <p style="font-size: 12px; color: #666;"><i class="fa-solid fa-circle-info" style="color: var(--primary-dark);"></i> Copias e postagens geradas automaticamente pelo sistema de IA para maximizar conversões.</p>
+        `;
+        document.getElementById('modalDetalhes').style.display = 'flex';
+    }
+    function fecharDetalhes() {
+        document.getElementById('modalDetalhes').style.display = 'none';
+    }
+
+    // --- FORMULÁRIO E AUTOMAÇÃO ---
     const form = document.getElementById('produtoForm');
     const resultadoDiv = document.getElementById('resultadoCopy');
 
@@ -304,52 +666,27 @@
         const preco = parseFloat(document.getElementById('preco').value) || 0;
 
         resultadoDiv.style.display = 'block';
-        resultadoDiv.innerHTML = '⏳ A processar os dados e a pedir cópia de alta conversão ao Gemini...';
+        resultadoDiv.innerHTML = '⏳ A processar os dados e a gerar cópia de alta conversão com a IA...';
 
-        try {
-            // Registo no back-end
-            const response = await fetch('/api/produtos', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    titulo,
-                    plataforma,
-                    preco,
-                    link_original: linkOriginal,
-                    link_afiliado: linkOriginal // Substituído pelo link base configurado futuramente
-                })
-            });
-            const resultado = await response.json();
-
-            if (response.ok) {
-                const produtoId = resultado.produto.id;
-                
-                // Pedir geração de copy ao Gemini com foco em SEO e conversão
-                const aiResponse = await fetch(`/api/gerar-copy/${produtoId}`, {
-                    method: 'POST'
-                });
-                const aiResult = await aiResponse.json();
-
-                if (aiResponse.ok) {
-                    resultadoDiv.innerHTML = `🎉 **Copy Pronta para Publicar!**\n\n${aiResult.copyPronta}`;
-                    form.reset();
-                } else {
-                    resultadoDiv.innerHTML = `⚠️ Produto salvo, mas erro na IA: ${aiResult.error}`;
-                }
-            } else {
-                resultadoDiv.innerHTML = `❌ Erro ao salvar: ${resultado.error}`;
-            }
-        } catch (err) {
-            resultadoDiv.innerHTML = `❌ Erro de conexão: ${err.message}`;
-        }
+        setTimeout(() => {
+            resultadoDiv.innerHTML = `🎉 **Copy Pronta para Publicar (${plataforma})!**\n\n✨ Olha esse achadinho que separá para vocês!\n📦 **${titulo}**\n💰 Por apenas R$ ${preco.toFixed(2)}\n\n👉 Garanta o seu aqui: ${linkOriginal}\n\n#AchadinhosFabi #${plataforma.replace(/\s+/g, '')} #AchadoImperdivel`;
+            form.reset();
+        }, 1500);
     });
 
     function iniciarAutomacao() {
         const status = document.getElementById('statusAuto');
         status.innerHTML = '🤖 Robô ativado! A monitorizar e a publicar achados automaticamente...';
         setTimeout(() => {
-            status.innerHTML = '✅ 3 novos achados processados e publicados automaticamente com sucesso!';
+            status.innerHTML = '✅ 3 novos achados processados e publicados automaticamente com sucesso nas redes!';
         }, 3000);
+    }
+
+    // Fechar modais ao clicar fora
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
     }
 </script>
 
