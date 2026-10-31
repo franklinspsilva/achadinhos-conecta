@@ -473,18 +473,18 @@
             </div>
         </div>
 
-        <!-- Modo Manual com Auto-Preenchimento por IA -->
+        <!-- Modo Manual Direto -->
         <div class="card">
             <h2>🛍️ Modo Manual: Inserir Link Inteligente</h2>
             <form id="produtoForm">
                 <div class="form-group">
-                    <label for="link_original">Colar Link do Produto (Pressione Enter ou saia do campo para preencher automático):</label>
-                    <input type="url" id="link_original" required placeholder="Cole o link curto da Shopee ou ML aqui...">
+                    <label for="link_original">Colar Link do Produto:</label>
+                    <input type="url" id="link_original" required placeholder="Cole o link da Shopee ou ML aqui...">
                 </div>
 
                 <div class="form-group">
                     <label for="titulo">Título do Produto:</label>
-                    <input type="text" id="titulo" required placeholder="Preenchimento automático pela IA...">
+                    <input type="text" id="titulo" required placeholder="Ex: Tapete de Sala Grande 100% Algodão...">
                 </div>
                 
                 <div class="form-group">
@@ -500,7 +500,7 @@
 
                 <div class="form-group">
                     <label for="preco">Preço do Produto (R$):</label>
-                    <input type="number" step="0.01" id="preco" placeholder="0.00">
+                    <input type="number" step="0.01" id="preco" placeholder="75.93">
                 </div>
 
                 <div class="form-group">
@@ -595,47 +595,6 @@
 
         carregarDadosReaisPainel();
     };
-
-    // --- AUTOMAÇÃO INTELIGENTE AO COLAR O LINK E PRESSIONAR ENTER / SAIR DO CAMPO ---
-    const inputLink = document.getElementById('link_original');
-    inputLink.addEventListener('blur', analisarLinkComIA);
-    inputLink.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            analisarLinkComIA();
-        }
-    });
-
-    async function analisarLinkComIA() {
-        const link = inputLink.value.trim();
-        if (!link) return;
-
-        const inputTitulo = document.getElementById('titulo');
-        const selectPlataforma = document.getElementById('plataforma');
-        const inputPreco = document.getElementById('preco');
-
-        inputTitulo.value = '🤖 Analisando o link e buscando dados com IA...';
-
-        try {
-            // Identifica automaticamente a plataforma pelo link
-            if (link.includes('shopee') || link.includes('s.shopee')) {
-                selectPlataforma.value = 'Shopee';
-            } else if (link.includes('mercadolivre') || link.includes('mercadolivre.com') || link.includes('mercadolivre.com/sec')) {
-                selectPlataforma.value = 'Mercado Livre';
-            }
-
-            // Simula ou busca preenchimento inteligente baseado na URL
-            setTimeout(() => {
-                inputTitulo.value = 'Achadinho Selecionado da ' + selectPlataforma.value;
-                inputPreco.value = '99.90';
-                document.getElementById('comissao_estimada').value = '10.00';
-            }, 800);
-
-        } catch (err) {
-            inputTitulo.value = '';
-            console.error('Erro ao preencher com IA:', err);
-        }
-    }
 
     async function carregarDadosReaisPainel() {
         try {
@@ -781,11 +740,25 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ titulo, plataforma, preco, comissao_estimada, link_original, link_afiliado })
             });
-            const dataProd = await resProd.json();
+            
+            const textoResposta = await resProd.text();
+            let dataProd;
+            try {
+                dataProd = JSON.parse(textoResposta);
+            } catch (e) {
+                throw new Error("O servidor demorou a responder. Tente novamente em alguns segundos.");
+            }
+            
             if (!resProd.ok) throw new Error(dataProd.error || 'Erro ao cadastrar produto');
 
             const resCopy = await fetch(`/api/gerar-copy/${dataProd.produto.id}`, { method: 'POST' });
-            const dataCopy = await resCopy.json();
+            const textoCopyRes = await resCopy.text();
+            let dataCopy;
+            try {
+                dataCopy = JSON.parse(textoCopyRes);
+            } catch (e) {
+                throw new Error("Erro ao interpretar a resposta da Inteligência Artificial.");
+            }
 
             if (resCopy.ok) {
                 resultadoCopy.innerText = dataCopy.copyPronta;
