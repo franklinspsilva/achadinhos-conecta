@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Achadinhos Conecta - Painel da Fabi</title>
-    <!-- FontAwesome para ícones (Catraca, Lojas, etc) -->
+    <!-- FontAwesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -22,7 +22,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
 
         .container {
@@ -30,33 +30,37 @@
             margin: 0 auto;
         }
 
-        /* Cabeçalho Estilo Perfil Instagram com Catraca */
+        /* Cabeçalho Estilo Perfil Instagram Responsivo */
         .profile-header {
             background: var(--white);
-            padding: 25px;
+            padding: 20px;
             border-radius: var(--border-radius);
             box-shadow: 0 4px 20px rgba(0,0,0,0.04);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .profile-left {
             display: flex;
             align-items: center;
-            gap: 25px;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .profile-pic {
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
             padding: 3px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .profile-pic-inner {
@@ -69,27 +73,27 @@
             justify-content: center;
             font-weight: bold;
             color: var(--primary-dark);
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .profile-info h1 {
             margin: 0 0 5px 0;
-            font-size: 22px;
+            font-size: 20px;
             color: var(--text-color);
         }
 
         .profile-info p {
             margin: 0;
             color: #666;
-            font-size: 14px;
+            font-size: 13px;
         }
 
-        /* Botão da Catraca no Topo */
+        /* Botão da Catraca */
         .gear-btn {
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 24px;
+            font-size: 22px;
             color: var(--primary-dark);
             padding: 10px;
             border-radius: 50%;
@@ -102,24 +106,25 @@
             transform: rotate(45deg);
         }
 
-        /* Sistema de Abas */
+        /* Sistema de Abas Responsivo */
         .tabs-nav {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 20px;
             border-bottom: 2px solid #e0d6c3;
             padding-bottom: 10px;
+            overflow-x: auto;
         }
 
         .tab-btn {
             background: none;
             border: none;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             color: #888;
             cursor: pointer;
-            padding: 8px 12px;
-            width: auto;
+            padding: 8px 14px;
+            white-space: nowrap;
             border-radius: 8px;
             transition: all 0.2s;
         }
@@ -137,25 +142,25 @@
             display: block;
         }
 
-        /* Cartões e Secções */
+        /* Cartões */
         .card {
             background: var(--white);
-            padding: 25px;
+            padding: 20px;
             border-radius: var(--border-radius);
             box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .card h2 {
             margin-top: 0;
-            font-size: 18px;
+            font-size: 17px;
             color: var(--primary-dark);
             border-bottom: 2px solid var(--secondary);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
         }
 
-        /* Gráfico em Arco Dinâmico Sem Teto Fixo */
+        /* Gráfico em Arco e Legenda de Metas */
         .metrics-container {
             display: flex;
             align-items: center;
@@ -167,7 +172,7 @@
         .arc-gauge {
             position: relative;
             width: 160px;
-            height: 100px;
+            height: 95px;
             overflow: hidden;
             text-align: center;
         }
@@ -176,9 +181,9 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
-            color: var(--primary-dark);
+            color: var(--text-color);
         }
 
         .metrics-details {
@@ -189,29 +194,56 @@
             color: var(--primary-dark);
             text-decoration: none;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             display: inline-block;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .metrics-details a:hover {
             text-decoration: underline;
         }
 
-        /* Tabela de Relatórios */
+        /* Legenda de Metas no Rodapé do Gráfico */
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #e0d6c3;
+            font-size: 11px;
+            color: #555;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* Tabela Responsiva */
         .table-responsive {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 14px;
+            font-size: 13px;
+            min-width: 500px;
         }
 
         th, td {
-            padding: 12px;
+            padding: 10px;
             border-bottom: 1px solid #eee;
         }
 
@@ -229,26 +261,26 @@
         .badge {
             background-color: var(--secondary);
             color: var(--primary-dark);
-            padding: 4px 8px;
+            padding: 3px 6px;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
         }
 
-        /* Filtros de Período */
+        /* Filtros */
         .filter-group {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .filter-btn {
             background-color: #faf9f5;
             border: 1px solid #e0d6c3;
             color: var(--text-color);
-            padding: 6px 12px;
-            font-size: 13px;
+            padding: 5px 10px;
+            font-size: 12px;
             border-radius: 6px;
             cursor: pointer;
             width: auto;
@@ -261,21 +293,21 @@
             border-color: var(--primary-dark);
         }
 
-        /* Formulários e Inputs */
+        /* Formulários e Inputs Adaptáveis */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         label {
             display: block;
             font-weight: 600;
-            margin-bottom: 6px;
-            font-size: 14px;
+            margin-bottom: 5px;
+            font-size: 13px;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #e0d6c3;
             border-radius: 8px;
             font-size: 14px;
@@ -287,8 +319,8 @@
             background-color: var(--primary-dark);
             color: white;
             border: none;
-            padding: 14px 20px;
-            font-size: 15px;
+            padding: 12px 16px;
+            font-size: 14px;
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
@@ -308,8 +340,8 @@
         }
 
         #resultadoBox {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 15px;
+            padding: 12px;
             background: var(--secondary);
             border-radius: 8px;
             display: none;
@@ -317,20 +349,17 @@
 
         #resultadoCopy {
             white-space: pre-wrap;
-            font-size: 14px;
-            margin-bottom: 12px;
+            font-size: 13px;
+            margin-bottom: 10px;
         }
 
         .btn-copiar {
             background-color: #2a9d8f;
-            padding: 10px;
-            font-size: 14px;
-        }
-        .btn-copiar:hover {
-            background-color: #21867a;
+            padding: 8px;
+            font-size: 13px;
         }
 
-        /* Modal Customizado */
+        /* Modais Responsivos */
         .modal {
             display: none;
             position: fixed;
@@ -342,17 +371,18 @@
             background-color: rgba(0,0,0,0.5);
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
+            box-sizing: border-box;
         }
 
         .modal-content {
             background-color: var(--white);
-            padding: 25px;
+            padding: 20px;
             border-radius: var(--border-radius);
             width: 100%;
-            max-width: 500px;
+            max-width: 480px;
             box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
         }
 
@@ -361,30 +391,50 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid var(--secondary);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
         }
 
         .modal-header h3 {
             margin: 0;
             color: var(--primary-dark);
+            font-size: 16px;
         }
 
         .close-modal {
             background: none;
             border: none;
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
             color: #888;
             width: auto;
             padding: 0;
+        }
+
+        /* Ajustes para telas menores (Smartphones) */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .profile-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .gear-btn {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+            .profile-header {
+                position: relative;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Cabeçalho Estilo Perfil Instagram com Catraca no Topo -->
+    <!-- Cabeçalho Estilo Perfil Instagram -->
     <div class="profile-header">
         <div class="profile-left">
             <div class="profile-pic">
@@ -392,12 +442,11 @@
             </div>
             <div class="profile-info">
                 <h1>Fabi | Achadinhos Conecta 🔗</h1>
-                <p>🏠 Praticidade, organização e decoração para o seu dia a dia.</p>
+                <p>🏠 Praticidade, organização e decoração para o dia a dia.</p>
                 <p>✨ Automação inteligente de afiliados & redes sociais</p>
             </div>
         </div>
-        <!-- Botão Catraca / Configurações -->
-        <button class="gear-btn" onclick="abrirConfiguracoes()" title="Configurações de Lojas e Links">
+        <button class="gear-btn" onclick="abrirConfiguracoes()" title="Configurações">
             <i class="fa-solid fa-gear"></i>
         </button>
     </div>
@@ -408,16 +457,16 @@
         <button class="tab-btn" onclick="mudarAba('relatorios')">Histórico & Relatórios da IA</button>
     </div>
 
-    <!-- CONTEÚDO DA ABA 1: PAINEL & GERADOR -->
+    <!-- ABA 1: PAINEL & GERADOR -->
     <div id="tab-dashboard" class="tab-content active">
-        <!-- Painel de Métricas e Evolução (Gráfico em Arco Flexível) -->
+        <!-- Gráfico em Arco Dinâmico com Cores por Metas -->
         <div class="card">
             <h2>📊 Evolução de Comissões e Cliques</h2>
             <div class="metrics-container">
                 <div class="arc-gauge">
                     <svg width="160" height="90" viewBox="0 0 160 90">
                         <path d="M 15 85 A 65 65 0 1 1 145 85" fill="none" stroke="#eee" stroke-width="14" stroke-linecap="round"/>
-                        <path id="arcoProgresso" d="M 15 85 A 65 65 0 0 1 145 85" fill="none" stroke="#bc6c25" stroke-width="14" stroke-linecap="round" stroke-dasharray="204" stroke-dashoffset="204" style="transition: stroke-dashoffset 0.8s ease;"/>
+                        <path id="arcoProgresso" d="M 15 85 A 65 65 0 0 1 145 85" fill="none" stroke="#e63946" stroke-width="14" stroke-linecap="round" stroke-dasharray="204" stroke-dashoffset="204" style="transition: stroke-dashoffset 0.8s ease, stroke 0.5s ease;"/>
                     </svg>
                     <div class="arc-gauge-value" id="totalComissao">R$ 0,00</div>
                 </div>
@@ -426,9 +475,16 @@
                     <a href="#" onclick="mudarAba('relatorios'); return false;">Ver relatórios completos &rarr;</a>
                 </div>
             </div>
+            <!-- Legenda de Metas no Rodapé do Gráfico -->
+            <div class="chart-legend">
+                <div class="legend-item"><span class="legend-dot" style="background-color: #e63946;"></span> Até R$ 1k</div>
+                <div class="legend-item"><span class="legend-dot" style="background-color: #f4a261;"></span> Até R$ 2k</div>
+                <div class="legend-item"><span class="legend-dot" style="background-color: #e9c46a;"></span> Até R$ 3k</div>
+                <div class="legend-item"><span class="legend-dot" style="background-color: #2a9d8f;"></span> Acima de R$ 3k</div>
+            </div>
         </div>
 
-        <!-- Modo 1: Cadastro Inteligente por Link Único -->
+        <!-- Modo Manual -->
         <div class="card">
             <h2>🛍️ Modo Manual: Inserir Link Inteligente</h2>
             <form id="produtoForm">
@@ -466,25 +522,24 @@
                 <button type="submit">Cadastrar e Gerar Copy com IA 🚀</button>
             </form>
 
-            <!-- Caixa de Resultado com Botão de Copiar com 1 Clique -->
             <div id="resultadoBox">
                 <div id="resultadoCopy"></div>
                 <button class="btn-copiar" onclick="copiarCopyParaClipboard()"><i class="fa-solid fa-copy"></i> Copiar Copy com 1 Clique</button>
             </div>
         </div>
 
-        <!-- Modo 2: Automação Total (Um Clique) -->
+        <!-- Modo Autônomo -->
         <div class="card">
             <h2>⚡ Modo Autônomo (Automação Total por IA)</h2>
-            <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
-                A IA faz a curadoria automática dos melhores produtos, gera os textos com gatilhos mentais e publica nas redes conectadas.
+            <p style="font-size: 13px; color: #666; margin-bottom: 12px;">
+                A IA faz a curadoria automática dos melhores produtos e gera os textos comerciais.
             </p>
             <button class="btn-auto" onclick="iniciarAutomacao()">Iniciar Robô de Automação Total 🤖</button>
-            <div id="statusAuto" style="margin-top: 15px; font-size: 14px; font-weight: bold; color: #2a9d8f;"></div>
+            <div id="statusAuto" style="margin-top: 12px; font-size: 13px; font-weight: bold; color: #2a9d8f;"></div>
         </div>
     </div>
 
-    <!-- CONTEÚDO DA ABA 2: HISTÓRICO E RELATÓRIOS DA IA -->
+    <!-- ABA 2: HISTÓRICO E RELATÓRIOS -->
     <div id="tab-relatorios" class="tab-content">
         <div class="card">
             <h2>📈 Histórico de Postagens e Renda Gerada</h2>
@@ -493,7 +548,6 @@
                 <button class="filter-btn active" onclick="carregarRelatoriosReais(this)">Todos os Dados Reais</button>
             </div>
 
-            <!-- Tabela Detalhada -->
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -506,7 +560,7 @@
                         </tr>
                     </thead>
                     <tbody id="tabela-corpo">
-                        <!-- Preenchido dinamicamente via Banco de Dados -->
+                        <!-- Preenchido via Banco de Dados -->
                     </tbody>
                     <tfoot>
                         <tr style="font-weight: bold; background-color: #faf9f5;">
@@ -521,48 +575,48 @@
     </div>
 </div>
 
-<!-- MODAL DE CONFIGURAÇÕES (CATRACA) -->
+<!-- MODAL CONFIGURAÇÕES -->
 <div id="modalConfig" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <h3><i class="fa-solid fa-gear"></i> Configurações de Lojas & Links</h3>
             <button class="close-modal" onclick="fecharConfiguracoes()">&times;</button>
         </div>
-        <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Gerencie os links de afiliado e dados de acesso das plataformas da Fabi (salvo automaticamente no dispositivo):</p>
+        <p style="font-size: 12px; color: #666; margin-bottom: 12px;">Gerencie os links de afiliado salvos no dispositivo:</p>
         
         <div class="form-group">
-            <label>Shopee (Afiliados / Link Base):</label>
+            <label>Shopee (Link Base):</label>
             <input type="text" id="cfgShopee" placeholder="https://s.shopee.com.br/...">
         </div>
         <div class="form-group">
-            <label>Mercado Livre (Afiliados / Link Base):</label>
+            <label>Mercado Livre (Link Base):</label>
             <input type="text" id="cfgML" placeholder="https://mercadolivre.com/sec/...">
         </div>
         <div class="form-group">
             <label>TikTok Shop:</label>
-            <input type="text" id="cfgTikTok" placeholder="Link do perfil ou vitrine TikTok">
+            <input type="text" id="cfgTikTok" placeholder="Link do perfil TikTok">
         </div>
         <div class="form-group">
-            <label>Facebook (Página / Grupo):</label>
+            <label>Facebook:</label>
             <input type="text" id="cfgFace" placeholder="Link da página ou grupo">
         </div>
         <div class="form-group">
-            <label>Instagram (@AchadinhosFabi):</label>
-            <input type="text" id="cfgInsta" placeholder="Link do perfil ou canal de transmissão">
+            <label>Instagram:</label>
+            <input type="text" id="cfgInsta" placeholder="Link do perfil Instagram">
         </div>
         
         <button onclick="salvarConfiguracoes()" style="margin-top: 10px;">Salvar Alterações</button>
     </div>
 </div>
 
-<!-- MODAL DE DETALHES -->
+<!-- MODAL DETALHES -->
 <div id="modalDetalhes" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <h3>Detalhes da Postagem</h3>
             <button class="close-modal" onclick="fecharDetalhes()">&times;</button>
         </div>
-        <div id="conteudoDetalhes" style="font-size: 14px; line-height: 1.6; color: #444;"></div>
+        <div id="conteudoDetalhes" style="font-size: 13px; line-height: 1.5; color: #444;"></div>
     </div>
 </div>
 
@@ -577,7 +631,7 @@
         carregarDadosReaisPainel();
     };
 
-    // --- CARREGAR DADOS E CONTROLAR GRÁFICO DINÂMICO SEM TETO FIXO ---
+    // --- GRÁFICO DINÂMICO COM CORES POR METAS E SEM TETO FIXO ---
     async function carregarDadosReaisPainel() {
         try {
             const response = await fetch('/api/relatorios');
@@ -596,11 +650,20 @@
                 elementoComissao.innerText = `R$ ${totalRendaGeral.toFixed(2).replace('.', ',')}`;
             }
 
-            // Escala dinâmica adaptativa sem teto: o teto de referência se ajusta automaticamente ao volume alcançado
+            // Lógica de cores por metas sem teto limitante (escala adaptativa)
             let metaDinamica = 1000.00;
-            if (totalRendaGeral > 1000) metaDinamica = 5000.00;
-            if (totalRendaGeral > 5000) metaDinamica = 20000.00;
-            if (totalRendaGeral > 20000) metaDinamica = 100000.00;
+            let corArco = '#e63946'; // Vermelho até 1000
+
+            if (totalRendaGeral > 1000 && totalRendaGeral <= 2000) {
+                metaDinamica = 2000.00;
+                corArco = '#f4a261'; // Laranja até 2000
+            } else if (totalRendaGeral > 2000 && totalRendaGeral <= 3000) {
+                metaDinamica = 3000.00;
+                corArco = '#e9c46a'; // Amarelo até 3000
+            } else if (totalRendaGeral > 3000) {
+                metaDinamica = totalRendaGeral * 1.3; // Expande dinamicamente acima de 3000
+                corArco = '#2a9d8f'; // Verde acima de 3000
+            }
 
             const progresso = Math.min(totalRendaGeral / metaDinamica, 1);
             const comprimentoTotal = 204;
@@ -609,6 +672,7 @@
             const arco = document.getElementById('arcoProgresso');
             if (arco) {
                 arco.style.strokeDashoffset = offset;
+                arco.style.stroke = corArco; // Altera a cor do arco dinamicamente
             }
         } catch (err) {
             console.error('Erro ao carregar dados do painel:', err);
@@ -646,7 +710,7 @@
                 tr.innerHTML = `
                     <td><strong>${item.titulo}</strong></td>
                     <td><span class="badge">${item.plataforma}</span></td>
-                    <td style="color: #666; font-size: 13px;">${dataFormatada}</td>
+                    <td style="color: #666; font-size: 12px;">${dataFormatada}</td>
                     <td style="text-align: center;">${cliques.toLocaleString()}</td>
                     <td style="text-align: right; font-weight: bold; color: #2a9d8f;">R$ ${renda.toFixed(2)}</td>
                 `;
@@ -683,7 +747,7 @@
         localStorage.setItem('cfgTikTok', document.getElementById('cfgTikTok').value);
         localStorage.setItem('cfgFace', document.getElementById('cfgFace').value);
         localStorage.setItem('cfgInsta', document.getElementById('cfgInsta').value);
-        alert('Configurações salvas com sucesso no dispositivo!');
+        alert('Configurações salvas com sucesso!');
         fecharConfiguracoes();
     }
 
