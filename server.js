@@ -141,3 +141,20 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+// 6. Rota para Consolidar Relatórios Reais por Período
+app.get('/api/relatorios', async (req, res) => {
+  try {
+    const query = `
+      SELECT id, titulo, plataforma, preco, comissao_estimada, cliques, 
+             (cliques * comissao_estimada * 0.05) as renda_gerada, 
+             criado_em as data
+      FROM achadinhos
+      ORDER BY criado_em DESC;
+    `;
+    const resultado = await pool.query(query);
+    res.json(resultado.rows);
+  } catch (err) {
+    console.error('Erro ao buscar relatórios:', err.message);
+    res.status(500).json({ error: 'Erro ao carregar relatórios.' });
+  }
+});
