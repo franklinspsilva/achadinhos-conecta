@@ -31,7 +31,7 @@ app.get('/', async (req, res) => {
     const result = await pool.query('SELECT NOW()');
     res.json({
       status: 'Online 🚀',
-      sistema: 'Achadinhos Conecta - Render Cloud',
+      sistema: 'Achadinhos Conecta - by Franklin Silva',
       banco_dados: 'Operacional',
       timestamp: result.rows[0].now
     });
