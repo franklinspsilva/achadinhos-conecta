@@ -4,29 +4,32 @@ const { GoogleGenAI } = require('@google/genai');
 require('dotenv').config();
 
 const app = express();
+app.use(express.json());
 app.use(express.static(__dirname));
 
-// Configuração segura do Banco de Dados com suporte a SSL (essencial para o Render)
+// Configuração segura do Banco de Dados com suporte a SSL (essencial para o Render/Neon)
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-// Teste preventivo de conexão com o Banco ao iniciar
-pool.connect((err, client, release) => {
-  if (err) {
-    console.error('❌ Erro ao conectar ao Banco de Dados:', err.stack);
-  } else {
-    console.log('✅ Banco de Dados conectado com sucesso!');
-    release();
-  }
-});
+// Teste preventivo de conexão com o Banco ao iniciar (apenas se não estiver em ambiente serverless estrito)
+if (process.env.NODE_ENV !== 'production') {
+  pool.connect((err, client, release) => {
+    if (err) {
+      console.error('❌ Erro ao conectar ao Banco de Dados:', err.stack);
+    } else {
+      console.log('✅ Banco de Dados conectado com sucesso!');
+      release();
+    }
+  });
+}
 
 // Inicialização segura da IA (Gemini)
 const ai = new GoogleGenAI();
 
 // 1. Rota de Status e Teste Geral
-app.get('/', async (req, res) => {
+app.get('/api/status', async (req, res) => {
   try {
     const result = await pool.query('SELECT NOW()');
     res.json({
@@ -136,11 +139,6 @@ app.post('/api/clique/:id', async (req, res) => {
   }
 });
 
-// Inicialização da porta
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Painel Achadinhos Conecta rodando na porta ${PORT}`);
-});
 // 6. Rota para Consolidar Relatórios Reais por Período
 app.get('/api/relatorios', async (req, res) => {
   try {
@@ -158,3 +156,14 @@ app.get('/api/relatorios', async (req, res) => {
     res.status(500).json({ error: 'Erro ao carregar relatórios.' });
   }
 });
+
+// Se estiver a correr localmente no PC, mantém a porta a escutar
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Painel Achadinhos Conecta rodando localmente na porta ${PORT}`);
+  });
+}
+
+// Essencial para o Vercel compilar e gerir a aplicação corretamente
+module.exports = app;
