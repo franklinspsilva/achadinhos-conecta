@@ -738,18 +738,18 @@
         resultadoCopy.innerText = '🤖 O robô no Fly.io está a abrir o link em segundo plano e a IA está a criar a copy...';
 
         try {
-            const resExtrator = await fetch('https://achadinhos-extrator.fly.dev/api/processar-achadinho', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    url: link_original, 
-                    plataforma: plataforma,
-                    precoEstimado: precoInformado,
-                    tituloManual: tituloManual,
-                    comissao_estimada: comissao_estimada,
-                    link_afiliado: link_afiliado
-                })
-            });
+            const resExtrator = await fetch('https://achadinhos-extrator-45uxwgn5h-franklinsilva.vercel.app/api/processar-achadinho', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+        url: link_original, 
+        plataforma: plataforma,
+        precoEstimado: precoInformado,
+        tituloManual: tituloManual,
+        comissao_estimada: comissao_estimada,
+        link_afiliado: link_afiliado
+    })
+});
 
             const textoExtratorRes = await resExtrator.text();
             let dataExtrator;
