@@ -483,8 +483,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="titulo">Título do Produto:</label>
-                    <input type="text" id="titulo" required placeholder="Ex: Tapete de Sala Grande 100% Algodão...">
+                    <label for="titulo">Título do Produto (Opcional se usar extrator):</label>
+                    <input type="text" id="titulo" placeholder="Ex: Tapete de Sala Grande 100% Algodão...">
                 </div>
                 
                 <div class="form-group">
@@ -508,7 +508,7 @@
                     <input type="number" step="0.01" id="comissao_estimada" placeholder="10.00">
                 </div>
 
-                <button type="submit">Cadastrar e Gerar Copy com IA 🚀</button>
+                <button type="submit">Cadastrar e Gerar Copy com Robô Fly.io 🚀</button>
             </form>
 
             <div id="resultadoBox">
@@ -604,7 +604,7 @@
             let totalCliquesGeral = 0;
 
             relatorios.forEach(item => {
-                totalRendaGeral += parseFloat(item.renda || 0);
+                totalRendaGeral += parseFloat(item.renda_gerada || item.renda || 0);
                 totalCliquesGeral += parseInt(item.cliques || 0);
             });
 
@@ -652,7 +652,7 @@
 
             lista.forEach(item => {
                 const cliques = parseInt(item.cliques || 0);
-                const renda = parseFloat(item.renda || 0);
+                const renda = parseFloat(item.renda_gerada || item.renda || 0);
                 totalCliques += cliques; totalRenda += renda;
                 const dataFormatada = new Date(item.data).toLocaleDateString('pt-BR');
 
@@ -704,12 +704,14 @@
 
     function abrirDetalhes(item) {
         const conteudo = document.getElementById('conteudoDetalhes');
+        const renda = parseFloat(item.renda_gerada || item.renda || 0);
         conteudo.innerHTML = `
             <p><strong>Produto:</strong> ${item.titulo}</p>
             <p><strong>Plataforma:</strong> ${item.plataforma}</p>
             <p><strong>Preço:</strong> R$ ${parseFloat(item.preco || 0).toFixed(2)}</p>
             <p><strong>Cliques Reais:</strong> ${item.cliques || 0}</p>
-            <p><strong>Renda Gerada:</strong> <span style="color: #2a9d8f; font-weight: bold;">R$ ${parseFloat(item.renda || 0).toFixed(2)}</span></p>
+            <p><strong>Renda Gerada:</strong> <span style="color: #2a9d8f; font-weight: bold;">R$ ${renda.toFixed(2)}</span></p>
+            <p><strong>Link Afiliado:</strong> <a href="${item.link_afiliado}" target="_blank">Testar Link</a></p>
         `;
         document.getElementById('modalDetalhes').style.display = 'flex';
     }
@@ -719,12 +721,13 @@
     const resultadoBox = document.getElementById('resultadoBox');
     const resultadoCopy = document.getElementById('resultadoCopy');
 
+    // INTEGRAÇÃO COM O EXTRATOR INTELIGENTE NO FLY.IO
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const link_original = document.getElementById('link_original').value;
-        const titulo = document.getElementById('titulo').value;
+        const tituloManual = document.getElementById('titulo').value;
         const plataforma = document.getElementById('plataforma').value;
-        const preco = parseFloat(document.getElementById('preco').value) || 0;
+        const precoInformado = document.getElementById('preco').value;
         const comissao_estimada = parseFloat(document.getElementById('comissao_estimada').value) || 5.00;
         
         let link_afiliado = link_original;
@@ -732,39 +735,34 @@
         if(plataforma === 'Mercado Livre' && localStorage.getItem('cfgML')) link_afiliado = localStorage.getItem('cfgML');
 
         resultadoBox.style.display = 'block';
-        resultadoCopy.innerText = '⏳ Salvando no banco de dados e gerando copy com a IA do Gemini...';
+        resultadoCopy.innerText = '🤖 O robô no Fly.io está a abrir o link em segundo plano e a IA está a criar a copy...';
 
         try {
-            const resProd = await fetch('/api/produtos', {
+            const resExtrator = await fetch('https://achadinhos-extrator.fly.dev/api/processar-achadinho', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ titulo, plataforma, preco, comissao_estimada, link_original, link_afiliado })
+                body: JSON.stringify({ 
+                    url: link_original, 
+                    plataforma: plataforma,
+                    precoEstimado: precoInformado,
+                    tituloManual: tituloManual,
+                    comissao_estimada: comissao_estimada,
+                    link_afiliado: link_afiliado
+                })
             });
-            
-            const textoResposta = await resProd.text();
-            let dataProd;
-            try {
-                dataProd = JSON.parse(textoResposta);
-            } catch (e) {
-                throw new Error("O servidor demorou a responder. Tente novamente em alguns segundos.");
-            }
-            
-            if (!resProd.ok) throw new Error(dataProd.error || 'Erro ao cadastrar produto');
 
-            const resCopy = await fetch(`/api/gerar-copy/${dataProd.produto.id}`, { method: 'POST' });
-            const textoCopyRes = await resCopy.text();
-            let dataCopy;
+            const textoExtratorRes = await resExtrator.text();
+            let dataExtrator;
             try {
-                dataCopy = JSON.parse(textoCopyRes);
-            } catch (e) {
-                throw new Error("Erro ao interpretar a resposta da Inteligência Artificial.");
+                dataExtrator = JSON.parse(textoExtratorRes);
+            } catch (errParse) {
+                throw new Error("O extrator demorou a responder ou retornou vazio.");
             }
 
-            if (resCopy.ok) {
-                resultadoCopy.innerText = dataCopy.copyPronta;
-            } else {
-                resultadoCopy.innerText = `Produto salvo, mas houve um erro na IA: ${dataCopy.error}`;
-            }
+            if (!resExtrator.ok) throw new Error(dataExtrator.error || 'Erro ao processar o link no extrator.');
+
+            // Mostra a copy comercial pronta gerada pela IA do Fly.io
+            resultadoCopy.innerText = dataExtrator.copyPronta;
 
             form.reset();
             carregarDadosReaisPainel();
