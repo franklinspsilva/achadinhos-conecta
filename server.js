@@ -6,6 +6,10 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(express.static(__dirname));
+// Rota principal para carregar o Painel Visual da Fabi (index.html)
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
 
 // Configuração segura do Banco de Dados com suporte a SSL (essencial para o Render/Neon)
 const pool = new Pool({
