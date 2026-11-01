@@ -137,9 +137,9 @@ app.post('/api/clique/:id', async (req, res) => {
 });
 
 // Inicialização da porta
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Painel Achadinhos Conecta rodando na porta ${PORT}`);
 });
 // 6. Rota para Consolidar Relatórios Reais por Período
 app.get('/api/relatorios', async (req, res) => {
