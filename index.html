@@ -2,813 +2,105 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Achadinhos Conecta - Painel da Fabi</title>
-    <!-- FontAwesome para ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #d4a373;
-            --primary-dark: #bc6c25;
-            --secondary: #faedcd;
-            --bg-color: #fdfbf7;
-            --text-color: #2b2b2b;
-            --white: #ffffff;
-            --border-radius: 16px;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 15px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        /* Cabeçalho Estilo Perfil Instagram Responsivo */
-        .profile-header {
-            background: var(--white);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .profile-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .profile-pic {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            padding: 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .profile-pic-inner {
-            width: 100%;
-            height: 100%;
-            background: var(--white);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: var(--primary-dark);
-            font-size: 16px;
-        }
-
-        .profile-info h1 {
-            margin: 0 0 5px 0;
-            font-size: 20px;
-            color: var(--text-color);
-        }
-
-        .profile-info p {
-            margin: 0;
-            color: #666;
-            font-size: 13px;
-        }
-
-        /* Botão da Catraca */
-        .gear-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 22px;
-            color: var(--primary-dark);
-            padding: 10px;
-            border-radius: 50%;
-            transition: background 0.2s, transform 0.2s;
-            width: auto;
-        }
-
-        .gear-btn:hover {
-            background-color: var(--secondary);
-            transform: rotate(45deg);
-        }
-
-        /* Sistema de Abas Responsivo */
-        .tabs-nav {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e0d6c3;
-            padding-bottom: 10px;
-            overflow-x: auto;
-        }
-
-        .tab-btn {
-            background: none;
-            border: none;
-            font-size: 15px;
-            font-weight: bold;
-            color: #888;
-            cursor: pointer;
-            padding: 8px 14px;
-            white-space: nowrap;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-
-        .tab-btn.active {
-            color: var(--primary-dark);
-            background-color: var(--secondary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Cartões */
-        .card {
-            background: var(--white);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            margin-bottom: 20px;
-        }
-
-        .card h2 {
-            margin-top: 0;
-            font-size: 17px;
-            color: var(--primary-dark);
-            border-bottom: 2px solid var(--secondary);
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-        }
-
-        /* Gráfico em Arco e Legenda de Metas */
-        .metrics-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .arc-gauge {
-            position: relative;
-            width: 160px;
-            height: 95px;
-            overflow: hidden;
-            text-align: center;
-        }
-
-        .arc-gauge-value {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--text-color);
-        }
-
-        .metrics-details {
-            text-align: center;
-        }
-
-        .metrics-details a {
-            color: var(--primary-dark);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 13px;
-            display: inline-block;
-            margin-top: 6px;
-        }
-
-        .metrics-details a:hover {
-            text-decoration: underline;
-        }
-
-        .chart-legend {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px dashed #e0d6c3;
-            font-size: 11px;
-            color: #555;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .legend-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        /* Tabela Responsiva */
-        .table-responsive {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 13px;
-            min-width: 500px;
-        }
-
-        th, td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        th {
-            background-color: #faf9f5;
-            color: var(--primary-dark);
-            font-weight: 600;
-        }
-
-        tr:hover {
-            background-color: #fdfbf7;
-            cursor: pointer;
-        }
-
-        .badge {
-            background-color: var(--secondary);
-            color: var(--primary-dark);
-            padding: 3px 6px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-
-        .filter-btn {
-            background-color: #faf9f5;
-            border: 1px solid #e0d6c3;
-            color: var(--text-color);
-            padding: 5px 10px;
-            font-size: 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            width: auto;
-            font-weight: normal;
-        }
-
-        .filter-btn.active {
-            background-color: var(--primary-dark);
-            color: white;
-            border-color: var(--primary-dark);
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-            font-size: 13px;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #e0d6c3;
-            border-radius: 8px;
-            font-size: 14px;
-            box-sizing: border-box;
-            background-color: #faf9f5;
-        }
-
-        button {
-            background-color: var(--primary-dark);
-            color: white;
-            border: none;
-            padding: 12px 16px;
-            font-size: 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-
-        button:hover {
-            background-color: #a0581f;
-        }
-
-        .btn-auto {
-            background-color: #2a9d8f;
-        }
-        .btn-auto:hover {
-            background-color: #21867a;
-        }
-
-        #resultadoBox {
-            margin-top: 15px;
-            padding: 12px;
-            background: var(--secondary);
-            border-radius: 8px;
-            display: none;
-        }
-
-        #resultadoCopy {
-            white-space: pre-wrap;
-            font-size: 13px;
-            margin-bottom: 10px;
-        }
-
-        .btn-copiar {
-            background-color: #2a9d8f;
-            padding: 8px;
-            font-size: 13px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            box-sizing: border-box;
-        }
-
-        .modal-content {
-            background-color: var(--white);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            width: 100%;
-            max-width: 480px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--secondary);
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-        }
-
-        .modal-header h3 {
-            margin: 0;
-            color: var(--primary-dark);
-            font-size: 16px;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            color: #888;
-            width: auto;
-            padding: 0;
-        }
-
-        @media (max-width: 600px) {
-            body { padding: 10px; }
-            .profile-header {
-                flex-direction: column;
-                align-items: flex-start;
-                position: relative;
-            }
-            .gear-btn {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-            }
-        }
+        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 700px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #d35400; text-align: center; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; }
+        input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; background: #e67e22; color: white; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.3s; }
+        button:hover { background: #d35400; }
+        .resultado-box { margin-top: 30px; background: #fdfefe; border: 1px solid #e1e8ed; padding: 20px; border-radius: 8px; display: none; }
+        .info-grid { display: flex; gap: 15px; margin-bottom: 15px; }
+        .info-card { flex: 1; background: #f8f9fa; padding: 10px; border-radius: 6px; border-left: 4px solid #e67e22; font-size: 14px; }
+        textarea { width: 100%; height: 150px; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; background: #fffdf9; box-sizing: border-box; }
+        .btn-copiar { background: #27ae60; margin-top: 10px; }
+        .btn-copiar:hover { background: #219653; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Cabeçalho -->
-    <div class="profile-header">
-        <div class="profile-left">
-            <div class="profile-pic">
-                <div class="profile-pic-inner">AF</div>
-            </div>
-            <div class="profile-info">
-                <h1>Fabi | Achadinhos Conecta 🔗</h1>
-                <p>🏠 Praticidade, organização e decoração para o dia a dia.</p>
-                <p>✨ Automação inteligente de afiliados & redes sociais</p>
-            </div>
-        </div>
-        <button class="gear-btn" onclick="abrirConfiguracoes()" title="Configurações">
-            <i class="fa-solid fa-gear"></i>
-        </button>
+    <h2>🛍️ Achadinhos Conecta (Automação 1 Clique)</h2>
+    
+    <div class="form-group">
+        <label>Cole o Link Encurtado (Shopee ou Mercado Livre):</label>
+        <input type="text" id="urlInput" placeholder="Ex: https://s.shopee.com.br/...">
     </div>
 
-    <!-- Abas -->
-    <div class="tabs-nav">
-        <button class="tab-btn active" onclick="mudarAba('dashboard')">Painel & Gerador</button>
-        <button class="tab-btn" onclick="mudarAba('relatorios')">Histórico & Relatórios da IA</button>
-    </div>
+    <button onclick="processarAchadinho()">Processar e Gerar Anúncio Automaticamente 🚀</button>
 
-    <!-- ABA 1 -->
-    <div id="tab-dashboard" class="tab-content active">
-        <div class="card">
-            <h2>📊 Evolução de Comissões e Cliques</h2>
-            <div class="metrics-container">
-                <div class="arc-gauge">
-                    <svg width="160" height="90" viewBox="0 0 160 90">
-                        <path d="M 15 85 A 65 65 0 1 1 145 85" fill="none" stroke="#eee" stroke-width="14" stroke-linecap="round"/>
-                        <path id="arcoProgresso" d="M 15 85 A 65 65 0 0 1 145 85" fill="none" stroke="#e63946" stroke-width="14" stroke-linecap="round" stroke-dasharray="204" stroke-dashoffset="204" style="transition: stroke-dashoffset 0.8s ease, stroke 0.5s ease;"/>
-                    </svg>
-                    <div class="arc-gauge-value" id="totalComissao">R$ 0,00</div>
-                </div>
-                <div class="metrics-details">
-                    <p>Comissões e Cliques Acumulados</p>
-                    <a href="#" onclick="mudarAba('relatorios'); return false;">Ver relatórios completos &rarr;</a>
-                </div>
-            </div>
-            <div class="chart-legend">
-                <div class="legend-item"><span class="legend-dot" style="background-color: #e63946;"></span> Até R$ 1k</div>
-                <div class="legend-item"><span class="legend-dot" style="background-color: #f4a261;"></span> Até R$ 2k</div>
-                <div class="legend-item"><span class="legend-dot" style="background-color: #e9c46a;"></span> Até R$ 3k</div>
-                <div class="legend-item"><span class="legend-dot" style="background-color: #2a9d8f;"></span> Acima de R$ 3k</div>
-            </div>
+    <div class="resultado-box" id="resultadoBox">
+        <h3>✨ Anúncio Pronto para Validação</h3>
+        
+        <div class="info-grid">
+            <div class="info-card" id="infoPlataforma"><b>Plataforma:</b> -</div>
+            <div class="info-card" id="infoPreco"><b>Preço:</b> R$ -</div>
+            <div class="info-card" id="infoComissao"><b>Comissão Est.:</b> R$ -</div>
         </div>
 
-        <!-- Modo Manual Direto -->
-        <div class="card">
-            <h2>🛍️ Modo Manual: Inserir Link Inteligente</h2>
-            <form id="produtoForm">
-                <div class="form-group">
-                    <label for="link_original">Colar Link do Produto:</label>
-                    <input type="url" id="link_original" required placeholder="Cole o link da Shopee ou ML aqui...">
-                </div>
-
-                <div class="form-group">
-                    <label for="titulo">Título do Produto (Opcional se usar extrator):</label>
-                    <input type="text" id="titulo" placeholder="Ex: Tapete de Sala Grande 100% Algodão...">
-                </div>
-                
-                <div class="form-group">
-                    <label for="plataforma">Plataforma:</label>
-                    <select id="plataforma">
-                        <option value="Shopee">Shopee</option>
-                        <option value="Mercado Livre">Mercado Livre</option>
-                        <option value="TikTok Shop">TikTok Shop</option>
-                        <option value="Instagram">Instagram</option>
-                        <option value="Facebook">Facebook</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="preco">Preço do Produto (R$):</label>
-                    <input type="number" step="0.01" id="preco" placeholder="75.93">
-                </div>
-
-                <div class="form-group">
-                    <label for="comissao_estimada">Comissão Efetiva / Estimada (R$):</label>
-                    <input type="number" step="0.01" id="comissao_estimada" placeholder="10.00">
-                </div>
-
-                <button type="submit">Cadastrar e Gerar Copy com Vercel 🚀</button>
-            </form>
-
-            <div id="resultadoBox">
-                <div id="resultadoCopy"></div>
-                <button class="btn-copiar" onclick="copiarCopyParaClipboard()"><i class="fa-solid fa-copy"></i> Copiar Copy com 1 Clique</button>
-            </div>
+        <div class="form-group">
+            <label>Título Identificado:</label>
+            <input type="text" id="tituloRetorno" readonly>
         </div>
 
-        <div class="card">
-            <h2>⚡ Modo Autônomo (Automação Total por IA)</h2>
-            <p style="font-size: 13px; color: #666; margin-bottom: 12px;">
-                A IA faz a curadoria automática dos melhores produtos e gera os textos comerciais.
-            </p>
-            <button class="btn-auto" onclick="iniciarAutomacao()">Iniciar Robô de Automação Total 🤖</button>
-            <div id="statusAuto" style="margin-top: 12px; font-size: 13px; font-weight: bold; color: #2a9d8f;"></div>
+        <div class="form-group">
+            <label>Copy Pronta (Estilo Rotativo):</label>
+            <textarea id="copyRetorno"></textarea>
         </div>
-    </div>
 
-    <!-- ABA 2 -->
-    <div id="tab-relatorios" class="tab-content">
-        <div class="card">
-            <h2>📈 Histórico de Postagens e Renda Gerada</h2>
-            <div class="filter-group">
-                <button class="filter-btn active" onclick="carregarRelatoriosReais(this)">Todos os Dados Reais</button>
-            </div>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Plataforma</th>
-                            <th>Data / Hora</th>
-                            <th style="text-align: center;">Cliques</th>
-                            <th style="text-align: right;">Renda Gerada</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabela-corpo"></tbody>
-                    <tfoot>
-                        <tr style="font-weight: bold; background-color: #faf9f5;">
-                            <td colspan="3" style="text-align: right;">TOTAL GERAL:</td>
-                            <td id="total-cli" style="text-align: center;">0</td>
-                            <td id="total-val" style="text-align: right; color: var(--primary-dark);">R$ 0,00</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAIS -->
-<div id="modalConfig" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3><i class="fa-solid fa-gear"></i> Configurações de Lojas & Links</h3>
-            <button class="close-modal" onclick="fecharConfiguracoes()">&times;</button>
-        </div>
-        <div class="form-group"><label>Shopee (Link Base):</label><input type="text" id="cfgShopee" placeholder="https://s.shopee.com.br/..."></div>
-        <div class="form-group"><label>Mercado Livre (Link Base):</label><input type="text" id="cfgML" placeholder="https://mercadolivre.com/sec/..."></div>
-        <div class="form-group"><label>TikTok Shop:</label><input type="text" id="cfgTikTok" placeholder="Link TikTok"></div>
-        <div class="form-group"><label>Facebook:</label><input type="text" id="cfgFace" placeholder="Link Facebook"></div>
-        <div class="form-group"><label>Instagram:</label><input type="text" id="cfgInsta" placeholder="Link Instagram"></div>
-        <button onclick="salvarConfiguracoes()" style="margin-top: 10px;">Salvar Alterações</button>
-    </div>
-</div>
-
-<div id="modalDetalhes" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Detalhes da Postagem</h3>
-            <button class="close-modal" onclick="fecharDetalhes()">&times;</button>
-        </div>
-        <div id="conteudoDetalhes" style="font-size: 13px; line-height: 1.5; color: #444;"></div>
+        <button class="btn-copiar" onclick="copiarCopy()">Copiar Copy com 1 Clique 📋</button>
     </div>
 </div>
 
 <script>
-    window.onload = function() {
-        if(localStorage.getItem('cfgShopee')) document.getElementById('cfgShopee').value = localStorage.getItem('cfgShopee');
-        if(localStorage.getItem('cfgML')) document.getElementById('cfgML').value = localStorage.getItem('cfgML');
-        if(localStorage.getItem('cfgTikTok')) document.getElementById('cfgTikTok').value = localStorage.getItem('cfgTikTok');
-        if(localStorage.getItem('cfgFace')) document.getElementById('cfgFace').value = localStorage.getItem('cfgFace');
-        if(localStorage.getItem('cfgInsta')) document.getElementById('cfgInsta').value = localStorage.getItem('cfgInsta');
-
-        carregarDadosReaisPainel();
-    };
-
-    async function carregarDadosReaisPainel() {
-        try {
-            const response = await fetch('/api/relatorios');
-            if (!response.ok) return;
-            const textoRes = await response.text();
-            if (!textoRes.startsWith('[') && !textoRes.startsWith('{')) return;
-
-            const relatorios = JSON.parse(textoRes);
-            let totalRendaGeral = 0;
-            let totalCliquesGeral = 0;
-
-            relatorios.forEach(item => {
-                totalRendaGeral += parseFloat(item.renda_gerada || item.renda || 0);
-                totalCliquesGeral += parseInt(item.cliques || 0);
-            });
-
-            const elementoComissao = document.getElementById('totalComissao');
-            if (elementoComissao) {
-                elementoComissao.innerText = `R$ ${totalRendaGeral.toFixed(2).replace('.', ',')}`;
-            }
-
-            let metaDinamica = 1000.00;
-            let corArco = '#e63946';
-            if (totalRendaGeral > 1000 && totalRendaGeral <= 2000) {
-                metaDinamica = 2000.00; corArco = '#f4a261';
-            } else if (totalRendaGeral > 2000 && totalRendaGeral <= 3000) {
-                metaDinamica = 3000.00; corArco = '#e9c46a';
-            } else if (totalRendaGeral > 3000) {
-                metaDinamica = totalRendaGeral * 1.3; corArco = '#2a9d8f';
-            }
-
-            const progresso = Math.min(totalRendaGeral / metaDinamica, 1);
-            const offset = 204 - (204 * progresso);
-            const arco = document.getElementById('arcoProgresso');
-            if (arco) {
-                arco.style.strokeDashoffset = offset;
-                arco.style.stroke = corArco;
-            }
-        } catch (err) {
-            // Silencia erros caso a API de relatórios não esteja ativa
+    async function processarAchadinho() {
+        const url = document.getElementById('urlInput').value.trim();
+        if (!url) {
+            alert('Por favor, cole o link do produto!');
+            return;
         }
-    }
 
-    async function carregarRelatoriosReais(btnElement) {
-        document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
-        if(btnElement) btnElement.classList.add('active');
+        const btn = document.querySelector('button');
+        btn.innerText = 'Processando nos bastidores... ⏳';
+        btn.disabled = true;
 
         try {
-            const response = await fetch('/api/relatorios');
-            if (!response.ok) return;
-            const textoRes = await response.text();
-            if (!textoRes.startsWith('[') && !textoRes.startsWith('{')) return;
-            
-            const lista = JSON.parse(textoRes);
-            const tbody = document.getElementById('tabela-corpo');
-            tbody.innerHTML = '';
-
-            let totalCliques = 0, totalRenda = 0;
-            if (lista.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #888;">Nenhum produto cadastrado ainda.</td></tr>`;
-            }
-
-            lista.forEach(item => {
-                const cliques = parseInt(item.cliques || 0);
-                const renda = parseFloat(item.renda_gerada || item.renda || 0);
-                totalCliques += cliques; totalRenda += renda;
-                const dataFormatada = new Date(item.data).toLocaleDateString('pt-BR');
-
-                const tr = document.createElement('tr');
-                tr.onclick = () => abrirDetalhes(item);
-                tr.innerHTML = `
-                    <td><strong>${item.titulo}</strong></td>
-                    <td><span class="badge">${item.plataforma}</span></td>
-                    <td style="color: #666; font-size: 12px;">${dataFormatada}</td>
-                    <td style="text-align: center;">${cliques.toLocaleString()}</td>
-                    <td style="text-align: right; font-weight: bold; color: #2a9d8f;">R$ ${renda.toFixed(2)}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            document.getElementById('total-cli').innerText = totalCliques.toLocaleString();
-            document.getElementById('total-val').innerText = `R$ ${totalRenda.toFixed(2)}`;
-        } catch (err) {
-            // Silencia erros na tabela
-        }
-    }
-
-    function mudarAba(abaId) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-        if (abaId === 'dashboard') {
-            document.getElementById('tab-dashboard').classList.add('active');
-            document.querySelectorAll('.tab-btn')[0].classList.add('active');
-            carregarDadosReaisPainel();
-        } else if (abaId === 'relatorios') {
-            document.getElementById('tab-relatorios').classList.add('active');
-            document.querySelectorAll('.tab-btn')[1].classList.add('active');
-            carregarRelatoriosReais(document.querySelector('.filter-btn'));
-        }
-    }
-
-    function abrirConfiguracoes() { document.getElementById('modalConfig').style.display = 'flex'; }
-    function fecharConfiguracoes() { document.getElementById('modalConfig').style.display = 'none'; }
-    function salvarConfiguracoes() {
-        localStorage.setItem('cfgShopee', document.getElementById('cfgShopee').value);
-        localStorage.setItem('cfgML', document.getElementById('cfgML').value);
-        localStorage.setItem('cfgTikTok', document.getElementById('cfgTikTok').value);
-        localStorage.setItem('cfgFace', document.getElementById('cfgFace').value);
-        localStorage.setItem('cfgInsta', document.getElementById('cfgInsta').value);
-        alert('Configurações salvas com sucesso!');
-        fecharConfiguracoes();
-    }
-
-    function abrirDetalhes(item) {
-        const conteudo = document.getElementById('conteudoDetalhes');
-        const renda = parseFloat(item.renda_gerada || item.renda || 0);
-        conteudo.innerHTML = `
-            <p><strong>Produto:</strong> ${item.titulo}</p>
-            <p><strong>Plataforma:</strong> ${item.plataforma}</p>
-            <p><strong>Preço:</strong> R$ ${parseFloat(item.preco || 0).toFixed(2)}</p>
-            <p><strong>Cliques Reais:</strong> ${item.cliques || 0}</p>
-            <p><strong>Renda Gerada:</strong> <span style="color: #2a9d8f; font-weight: bold;">R$ ${renda.toFixed(2)}</span></p>
-            <p><strong>Link Afiliado:</strong> <a href="${item.link_afiliado}" target="_blank">Testar Link</a></p>
-        `;
-        document.getElementById('modalDetalhes').style.display = 'flex';
-    }
-    function fecharDetalhes() { document.getElementById('modalDetalhes').style.display = 'none'; }
-
-    const form = document.getElementById('produtoForm');
-    const resultadoBox = document.getElementById('resultadoBox');
-    const resultadoCopy = document.getElementById('resultadoCopy');
-
-    // INTEGRAÇÃO COM O EXTRATOR NO VERCEL COM CARREGAMENTO ANIMADO
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const link_original = document.getElementById('link_original').value;
-        const tituloManual = document.getElementById('titulo').value;
-        const plataforma = document.getElementById('plataforma').value;
-        const precoInformado = document.getElementById('preco').value;
-        const comissao_estimada = parseFloat(document.getElementById('comissao_estimada').value) || 5.00;
-        
-        let link_afiliado = link_original;
-        if(plataforma === 'Shopee' && localStorage.getItem('cfgShopee')) link_afiliado = localStorage.getItem('cfgShopee');
-        if(plataforma === 'Mercado Livre' && localStorage.getItem('cfgML')) link_afiliado = localStorage.getItem('cfgML');
-
-        // Exibe a caixa de resultados e inicia a animação "Trabalhando...."
-        resultadoBox.style.display = 'block';
-        resultadoCopy.style.color = '#bc6c25';
-        resultadoCopy.style.fontWeight = 'bold';
-
-        let pontosCount = 0;
-        resultadoCopy.innerText = '🤖 Trabalhando';
-        const intervaloAnimacao = setInterval(() => {
-            pontosCount = (pontosCount % 4) + 1;
-            resultadoCopy.innerText = '🤖 Trabalhando' + '.'.repeat(pontosCount);
-        }, 500);
-
-        try {
-            const resExtrator = await fetch('https://achadinhos-extrator-rust.vercel.app/api/processar-achadinho', {
+            // URL do seu backend hospedado no Vercel
+            const resposta = await fetch('https://achadinhos-extrator.vercel.app/api/processar-achadinho', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    url: link_original, 
-                    plataforma: plataforma,
-                    precoEstimado: precoInformado,
-                    tituloManual: tituloManual,
-                    comissao_estimada: comissao_estimada,
-                    link_afiliado: link_afiliado
-                })
+                body: JSON.stringify({ url: url })
             });
 
-            const textoExtratorRes = await resExtrator.text();
-            let dataExtrator;
-            try {
-                dataExtrator = JSON.parse(textoExtratorRes);
-            } catch (errParse) {
-                throw new Error("O extrator retornou uma resposta inválida ou vazia.");
+            const dados = await resposta.json();
+
+            if (dados.success) {
+                document.getElementById('infoPlataforma').innerHTML = `<b>Plataforma:</b> ${dados.plataforma}`;
+                document.getElementById('infoPreco').innerHTML = `<b>Preço:</b> R$ ${dados.preco}`;
+                document.getElementById('infoComissao').innerHTML = `<b>Comissão Est.:</b> R$ ${dados.comissao}`;
+                document.getElementById('tituloRetorno').value = dados.titulo;
+                document.getElementById('copyRetorno').value = dados.copyPronta;
+                
+                document.getElementById('resultadoBox').style.display = 'block';
+            } else {
+                alert('Erro ao processar: ' + (dados.error || 'Erro desconhecido'));
             }
-
-            if (!resExtrator.ok) throw new Error(dataExtrator.error || 'Erro ao processar o link no extrator.');
-
-            // Para a animação e exibe a copy gerada com sucesso
-            clearInterval(intervaloAnimacao);
-            resultadoCopy.style.color = 'inherit';
-            resultadoCopy.style.fontWeight = 'normal';
-            resultadoCopy.innerText = dataExtrator.copyPronta;
-
-            form.reset();
-            carregarDadosReaisPainel();
-        } catch (err) {
-            // Para a animação e exibe o erro em destaque vermelho
-            clearInterval(intervaloAnimacao);
-            resultadoCopy.style.color = '#e63946';
-            resultadoCopy.style.fontWeight = 'bold';
-            resultadoCopy.innerText = `❌ Erro: ${err.message}`;
+        } catch (erro) {
+            alert('Erro de conexão com o extrator: ' + erro.message);
+        } finally {
+            btn.innerText = 'Processar e Gerar Anúncio Automaticamente 🚀';
+            btn.disabled = false;
         }
-    });
-
-    function copiarCopyParaClipboard() {
-        navigator.clipboard.writeText(resultadoCopy.innerText).then(() => {
-            alert('📋 Copy copiada com sucesso para a área de transferência!');
-        });
     }
 
-    function iniciarAutomacao() {
-        const status = document.getElementById('statusAuto');
-        status.innerHTML = '🤖 Robô ativado! Sincronizando com as APIs...';
-        setTimeout(() => { status.innerHTML = '✅ Sistema pronto para capturar os achados automaticamente!'; }, 2000);
-    }
-
-    window.onclick = function(event) {
-        if (event.target.classList.contains('modal')) event.target.style.display = 'none';
+    function copiarCopy() {
+        const textarea = document.getElementById('copyRetorno');
+        textarea.select();
+        document.execCommand('copy');
+        alert('Copy copiada com sucesso para a transferência!');
     }
 </script>
 
