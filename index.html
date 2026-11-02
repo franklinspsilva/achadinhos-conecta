@@ -599,7 +599,11 @@
     async function carregarDadosReaisPainel() {
         try {
             const response = await fetch('/api/relatorios');
-            const relatorios = await response.json();
+            if (!response.ok) return;
+            const textoRes = await response.text();
+            if (!textoRes.startsWith('[') && !textoRes.startsWith('{')) return;
+
+            const relatorios = JSON.parse(textoRes);
             let totalRendaGeral = 0;
             let totalCliquesGeral = 0;
 
@@ -631,7 +635,7 @@
                 arco.style.stroke = corArco;
             }
         } catch (err) {
-            console.error('Erro ao carregar dados:', err);
+            // Silencia erros caso a API de relatórios não esteja ativa
         }
     }
 
@@ -641,7 +645,11 @@
 
         try {
             const response = await fetch('/api/relatorios');
-            const lista = await response.json();
+            if (!response.ok) return;
+            const textoRes = await response.text();
+            if (!textoRes.startsWith('[') && !textoRes.startsWith('{')) return;
+            
+            const lista = JSON.parse(textoRes);
             const tbody = document.getElementById('tabela-corpo');
             tbody.innerHTML = '';
 
@@ -671,7 +679,7 @@
             document.getElementById('total-cli').innerText = totalCliques.toLocaleString();
             document.getElementById('total-val').innerText = `R$ ${totalRenda.toFixed(2)}`;
         } catch (err) {
-            console.error('Erro ao carregar relatórios:', err);
+            // Silencia erros na tabela
         }
     }
 
@@ -721,7 +729,7 @@
     const resultadoBox = document.getElementById('resultadoBox');
     const resultadoCopy = document.getElementById('resultadoCopy');
 
-    // INTEGRAÇÃO COM O EXTRATOR NO VERCEL COM CARREGAMENTO ANIMADO NA CAIXA CORRETA
+    // INTEGRAÇÃO COM O EXTRATOR NO VERCEL COM CARREGAMENTO ANIMADO
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const link_original = document.getElementById('link_original').value;
@@ -734,7 +742,7 @@
         if(plataforma === 'Shopee' && localStorage.getItem('cfgShopee')) link_afiliado = localStorage.getItem('cfgShopee');
         if(plataforma === 'Mercado Livre' && localStorage.getItem('cfgML')) link_afiliado = localStorage.getItem('cfgML');
 
-        // Exibe a caixa de resultados e inicia o "Trabalhando...." animado lá dentro
+        // Exibe a caixa de resultados e inicia a animação "Trabalhando...."
         resultadoBox.style.display = 'block';
         resultadoCopy.style.color = '#bc6c25';
         resultadoCopy.style.fontWeight = 'bold';
@@ -770,7 +778,7 @@
 
             if (!resExtrator.ok) throw new Error(dataExtrator.error || 'Erro ao processar o link no extrator.');
 
-            // Para a animação, repõe o estilo normal e preenche com a copy gerada
+            // Para a animação e exibe a copy gerada com sucesso
             clearInterval(intervaloAnimacao);
             resultadoCopy.style.color = 'inherit';
             resultadoCopy.style.fontWeight = 'normal';
@@ -779,7 +787,7 @@
             form.reset();
             carregarDadosReaisPainel();
         } catch (err) {
-            // Para a animação e exibe a mensagem de ERRO em vermelho destacado na caixa
+            // Para a animação e exibe o erro em destaque vermelho
             clearInterval(intervaloAnimacao);
             resultadoCopy.style.color = '#e63946';
             resultadoCopy.style.fontWeight = 'bold';
