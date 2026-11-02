@@ -721,7 +721,7 @@
     const resultadoBox = document.getElementById('resultadoBox');
     const resultadoCopy = document.getElementById('resultadoCopy');
 
-    // INTEGRAÇÃO COM O EXTRATOR NO VERCEL COM CARREGAMENTO ANIMADO
+    // INTEGRAÇÃO COM O EXTRATOR NO VERCEL COM CARREGAMENTO ANIMADO NA CAIXA CORRETA
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const link_original = document.getElementById('link_original').value;
@@ -734,11 +734,11 @@
         if(plataforma === 'Shopee' && localStorage.getItem('cfgShopee')) link_afiliado = localStorage.getItem('cfgShopee');
         if(plataforma === 'Mercado Livre' && localStorage.getItem('cfgML')) link_afiliado = localStorage.getItem('cfgML');
 
+        // Exibe a caixa de resultados e inicia o "Trabalhando...." animado lá dentro
         resultadoBox.style.display = 'block';
-        resultadoCopy.style.color = '#bc6c25'; // Cor padrão durante o carregamento
+        resultadoCopy.style.color = '#bc6c25';
         resultadoCopy.style.fontWeight = 'bold';
 
-        // Animação interativa "Trabalhando" com pontos (1 a 4) em loop
         let pontosCount = 0;
         resultadoCopy.innerText = '🤖 Trabalhando';
         const intervaloAnimacao = setInterval(() => {
@@ -765,12 +765,12 @@
             try {
                 dataExtrator = JSON.parse(textoExtratorRes);
             } catch (errParse) {
-                throw new Error("O extrator demorou a responder ou retornou vazio.");
+                throw new Error("O extrator retornou uma resposta inválida ou vazia.");
             }
 
             if (!resExtrator.ok) throw new Error(dataExtrator.error || 'Erro ao processar o link no extrator.');
 
-            // Para a animação, restaura o estilo e exibe a copy comercial gerada
+            // Para a animação, repõe o estilo normal e preenche com a copy gerada
             clearInterval(intervaloAnimacao);
             resultadoCopy.style.color = 'inherit';
             resultadoCopy.style.fontWeight = 'normal';
@@ -779,7 +779,7 @@
             form.reset();
             carregarDadosReaisPainel();
         } catch (err) {
-            // Para a animação e exibe a mensagem de ERRO em vermelho no mesmo lugar
+            // Para a animação e exibe a mensagem de ERRO em vermelho destacado na caixa
             clearInterval(intervaloAnimacao);
             resultadoCopy.style.color = '#e63946';
             resultadoCopy.style.fontWeight = 'bold';
