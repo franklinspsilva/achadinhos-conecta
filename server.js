@@ -111,10 +111,14 @@ app.post('/api/gerar-copy/:id', async (req, res) => {
     A resposta deve conter emojis chamativos, uma copy vendedora pronta para copiar e colar, e uma lista de hashtags otimizadas para o Explorar.`;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-    });
-
+    model: 'gemini-3.8-flash',
+    contents: [
+        {
+            role: 'user',
+            parts: [{ text: suaVariavelComPrompt }]
+        }
+    ]
+});
     const copyGerada = response.text;
 
     // Atualiza o banco com a copy gerada pela IA
