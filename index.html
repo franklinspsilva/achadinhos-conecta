@@ -508,7 +508,7 @@
                     <input type="number" step="0.01" id="comissao_estimada" placeholder="10.00">
                 </div>
 
-                <button type="submit">Cadastrar e Gerar Copy com Robô Fly.io 🚀</button>
+                <button type="submit">Cadastrar e Gerar Copy com Vercel 🚀</button>
             </form>
 
             <div id="resultadoBox">
@@ -721,7 +721,7 @@
     const resultadoBox = document.getElementById('resultadoBox');
     const resultadoCopy = document.getElementById('resultadoCopy');
 
-    // INTEGRAÇÃO COM O EXTRATOR INTELIGENTE NO FLY.IO
+    // INTEGRAÇÃO COM O EXTRATOR NO VERCEL COM CARREGAMENTO ANIMADO
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const link_original = document.getElementById('link_original').value;
@@ -735,21 +735,30 @@
         if(plataforma === 'Mercado Livre' && localStorage.getItem('cfgML')) link_afiliado = localStorage.getItem('cfgML');
 
         resultadoBox.style.display = 'block';
-        resultadoCopy.innerText = '🤖 O robô no Fly.io está a abrir o link em segundo plano e a IA está a criar a copy...';
+        resultadoCopy.style.color = '#bc6c25'; // Cor padrão durante o carregamento
+        resultadoCopy.style.fontWeight = 'bold';
+
+        // Animação interativa "Trabalhando" com pontos (1 a 4) em loop
+        let pontosCount = 0;
+        resultadoCopy.innerText = '🤖 Trabalhando';
+        const intervaloAnimacao = setInterval(() => {
+            pontosCount = (pontosCount % 4) + 1;
+            resultadoCopy.innerText = '🤖 Trabalhando' + '.'.repeat(pontosCount);
+        }, 500);
 
         try {
             const resExtrator = await fetch('https://achadinhos-extrator-rust.vercel.app/api/processar-achadinho', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ 
-        url: link_original, 
-        plataforma: plataforma,
-        precoEstimado: precoInformado,
-        tituloManual: tituloManual,
-        comissao_estimada: comissao_estimada,
-        link_afiliado: link_afiliado
-    })
-});
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    url: link_original, 
+                    plataforma: plataforma,
+                    precoEstimado: precoInformado,
+                    tituloManual: tituloManual,
+                    comissao_estimada: comissao_estimada,
+                    link_afiliado: link_afiliado
+                })
+            });
 
             const textoExtratorRes = await resExtrator.text();
             let dataExtrator;
@@ -761,12 +770,19 @@
 
             if (!resExtrator.ok) throw new Error(dataExtrator.error || 'Erro ao processar o link no extrator.');
 
-            // Mostra a copy comercial pronta gerada pela IA do Fly.io
+            // Para a animação, restaura o estilo e exibe a copy comercial gerada
+            clearInterval(intervaloAnimacao);
+            resultadoCopy.style.color = 'inherit';
+            resultadoCopy.style.fontWeight = 'normal';
             resultadoCopy.innerText = dataExtrator.copyPronta;
 
             form.reset();
             carregarDadosReaisPainel();
         } catch (err) {
+            // Para a animação e exibe a mensagem de ERRO em vermelho no mesmo lugar
+            clearInterval(intervaloAnimacao);
+            resultadoCopy.style.color = '#e63946';
+            resultadoCopy.style.fontWeight = 'bold';
             resultadoCopy.innerText = `❌ Erro: ${err.message}`;
         }
     });
