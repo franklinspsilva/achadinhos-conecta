@@ -2,107 +2,119 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Achadinhos Conecta - Painel da Fabi</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 700px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h2 { color: #d35400; text-align: center; margin-bottom: 25px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: bold; margin-bottom: 8px; }
-        input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        button { width: 100%; background: #e67e22; color: white; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.3s; }
-        button:hover { background: #d35400; }
-        .resultado-box { margin-top: 30px; background: #fdfefe; border: 1px solid #e1e8ed; padding: 20px; border-radius: 8px; display: none; }
-        .info-grid { display: flex; gap: 15px; margin-bottom: 15px; }
-        .info-card { flex: 1; background: #f8f9fa; padding: 10px; border-radius: 6px; border-left: 4px solid #e67e22; font-size: 14px; }
-        textarea { width: 100%; height: 150px; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; background: #fffdf9; box-sizing: border-box; }
-        .btn-copiar { background: #27ae60; margin-top: 10px; }
-        .btn-copiar:hover { background: #219653; }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-50 min-h-screen flex flex-col items-center justify-center p-4">
 
-<div class="container">
-    <h2>🛍️ Achadinhos Conecta (Automação 1 Clique)</h2>
-    
-    <div class="form-group">
-        <label>Cole o Link Encurtado (Shopee ou Mercado Livre):</label>
-        <input type="text" id="urlInput" placeholder="Ex: https://s.shopee.com.br/...">
+    <div class="bg-white shadow-xl rounded-2xl p-6 w-full max-w-xl">
+        <h1 class="text-2xl font-bold text-center text-slate-800 mb-6">🛍️ Achadinhos Conecta (Automação 1 Clique)</h1>
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-slate-700 mb-1">Cole o Link Encurtado (Shopee ou Mercado Livre):</label>
+            <input type="text" id="urlInput" placeholder="https://s.shopee.com.br/..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none">
+        </div>
+
+        <button onclick="processarAchadinho()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 rounded-lg transition duration-200 shadow-md">
+            Processar e Gerar Anúncio Automaticamente 🚀
+        </button>
+
+        <!-- Área de Validação e Resultado -->
+        <div id="resultadoArea" class="hidden mt-6 border-t pt-4 border-slate-200">
+            <h2 class="text-lg font-bold text-slate-800 mb-3">✨ Anúncio Pronto para Validação</h2>
+            
+            <div class="grid grid-cols-3 gap-2 mb-3 text-sm">
+                <div class="bg-slate-100 p-2 rounded text-center"><b>Plataforma:</b> <span id="infoPlataforma">Shopee</span></div>
+                <div class="bg-slate-100 p-2 rounded text-center"><b>Preço:</b> R$ <span id="infoPreco">0.00</span></div>
+                <div class="bg-slate-100 p-2 rounded text-center"><b>Comissão Est.:</b> R$ <span id="infoComissao">0.00</span></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Título Identificado:</label>
+                <input type="text" id="infoTitulo" readonly class="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded text-sm text-slate-700">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Copy Pronta (Estilo Rotativo):</label>
+                <textarea id="infoCopy" rows="6" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded text-sm text-slate-700 focus:outline-none"></textarea>
+            </div>
+
+            <!-- Botões de Disparo e Partilha nas Redes Sociais -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <button onclick="copiarParaInstagram()" class="bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-3 rounded-lg text-sm transition shadow">
+                    📸 Copiar p/ Instagram
+                </button>
+                <button onclick="dispararWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-3 rounded-lg text-sm transition shadow">
+                    🟢 Enviar no WhatsApp
+                </button>
+                <button onclick="dispararTelegram()" class="bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-3 rounded-lg text-sm transition shadow">
+                    🔵 Enviar no Telegram
+                </button>
+            </div>
+        </div>
     </div>
 
-    <button onclick="processarAchadinho()">Processar e Gerar Anúncio Automaticamente 🚀</button>
+    <script>
+        let linkFinalGlobal = '';
 
-    <div class="resultado-box" id="resultadoBox">
-        <h3>✨ Anúncio Pronto para Validação</h3>
-        
-        <div class="info-grid">
-            <div class="info-card" id="infoPlataforma"><b>Plataforma:</b> -</div>
-            <div class="info-card" id="infoPreco"><b>Preço:</b> R$ -</div>
-            <div class="info-card" id="infoComissao"><b>Comissão Est.:</b> R$ -</div>
-        </div>
-
-        <div class="form-group">
-            <label>Título Identificado:</label>
-            <input type="text" id="tituloRetorno" readonly>
-        </div>
-
-        <div class="form-group">
-            <label>Copy Pronta (Estilo Rotativo):</label>
-            <textarea id="copyRetorno"></textarea>
-        </div>
-
-        <button class="btn-copiar" onclick="copiarCopy()">Copiar Copy com 1 Clique 📋</button>
-    </div>
-</div>
-
-<script>
-    async function processarAchadinho() {
-        const url = document.getElementById('urlInput').value.trim();
-        if (!url) {
-            alert('Por favor, cole o link do produto!');
-            return;
-        }
-
-        const btn = document.querySelector('button');
-        btn.innerText = 'Processando nos bastidores... ⏳';
-        btn.disabled = true;
-
-        try {
-            // URL do seu backend hospedado no Vercel
-            const resposta = await fetch('https://achadinhos-extrator-rust.vercel.app/api/processar-achadinho', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: url })
-            });
-
-            const dados = await resposta.json();
-
-            if (dados.success) {
-                document.getElementById('infoPlataforma').innerHTML = `<b>Plataforma:</b> ${dados.plataforma}`;
-                document.getElementById('infoPreco').innerHTML = `<b>Preço:</b> R$ ${dados.preco}`;
-                document.getElementById('infoComissao').innerHTML = `<b>Comissão Est.:</b> R$ ${dados.comissao}`;
-                document.getElementById('tituloRetorno').value = dados.titulo;
-                document.getElementById('copyRetorno').value = dados.copyPronta;
-                
-                document.getElementById('resultadoBox').style.display = 'block';
-            } else {
-                alert('Erro ao processar: ' + (dados.error || 'Erro desconhecido'));
+        async function processarAchadinho() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) {
+                alert('Por favor, cole o link do produto!');
+                return;
             }
-        } catch (erro) {
-            alert('Erro de conexão com o extrator: ' + erro.message);
-        } finally {
-            btn.innerText = 'Processar e Gerar Anúncio Automaticamente 🚀';
-            btn.disabled = false;
+
+            const btn = document.querySelector('button[onclick="processarAchadinho()"]');
+            btn.innerText = 'Processando nos bastidores... ⏳';
+            btn.disabled = true;
+
+            try {
+                // URL correta do backend no Vercel do Extrator
+                const resposta = await fetch('https://achadinhos-extrator-rust.vercel.app/api/processar-achadinho', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+
+                const dados = await resposta.json();
+
+                if (dados.success) {
+                    linkFinalGlobal = dados.linkFinal;
+                    document.getElementById('infoPlataforma').innerText = dados.plataforma;
+                    document.getElementById('infoPreco').innerText = dados.preco;
+                    document.getElementById('infoComissao').innerText = dados.comissao;
+                    document.getElementById('infoTitulo').value = dados.titulo;
+                    document.getElementById('infoCopy').value = dados.copyPronta;
+                    
+                    document.getElementById('resultadoArea').classList.remove('hidden');
+                } else {
+                    alert('Erro ao processar: ' + (dados.error || 'Erro desconhecido'));
+                }
+            } catch (erro) {
+                alert('Erro de conexão com o extrator: ' + erro.message);
+            } finally {
+                btn.innerText = 'Processar e Gerar Anúncio Automaticamente 🚀';
+                btn.disabled = false;
+            }
         }
-    }
 
-    function copiarCopy() {
-        const textarea = document.getElementById('copyRetorno');
-        textarea.select();
-        document.execCommand('copy');
-        alert('Copy copiada com sucesso para a transferência!');
-    }
-</script>
+        function copiarParaInstagram() {
+            const copyText = document.getElementById('infoCopy');
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+            alert('✨ Copy copiada com sucesso! Cole agora no seu story ou legenda do Instagram (Link da Bio/Sticker da Shopee ativo).');
+        }
 
+        function dispararWhatsApp() {
+            const texto = encodeURIComponent(document.getElementById('infoCopy').value);
+            window.open(`https://api.whatsapp.com/send?text=${texto}`, '_blank');
+        }
+
+        function dispararTelegram() {
+            const texto = encodeURIComponent(document.getElementById('infoCopy').value);
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(linkFinalGlobal)}&text=${texto}`, '_blank');
+        }
+    </script>
 </body>
 </html>
