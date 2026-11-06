@@ -69,7 +69,7 @@
 
         try {
             // URL do seu backend hospedado no Vercel
-            const resposta = await fetch('https://achadinhos-extrator.vercel.app/api/processar-achadinho', {
+            const resposta = await fetch('https://achadinhos-extrator-rust.vercel.app/api/processar-achadinho', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url: url })
